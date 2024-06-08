@@ -9,10 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  RenderObject getOverlayColor(WidgetTester tester) {
-    return tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
-  }
-
   test('SegmentedButtonThemeData copyWith, ==, hashCode basics', () {
     expect(const SegmentedButtonThemeData(), const SegmentedButtonThemeData().copyWith());
     expect(const SegmentedButtonThemeData().hashCode, const SegmentedButtonThemeData().copyWith().hashCode);
@@ -520,20 +516,20 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.08)));
+    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.08)));
 
     // Hovered unselected segment,
     center = tester.getCenter(find.text('Option 2'));
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.08)));
+    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.08)));
 
     // Highlighted unselected segment (pressed).
     center = tester.getCenter(find.text('Option 1'));
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(
-      getOverlayColor(tester),
+      tester.inkController,
       paints
         ..rect(color: overlayColor.withOpacity(0.08))
         ..rect(color: overlayColor.withOpacity(0.1)),
@@ -549,7 +545,7 @@ void main() {
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(
-      getOverlayColor(tester),
+      tester.inkController,
       paints
         ..rect(color: overlayColor.withOpacity(0.08))
         ..rect(color: overlayColor.withOpacity(0.1)),
@@ -563,11 +559,11 @@ void main() {
     // Focused unselected segment.
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pumpAndSettle();
-    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.1)));
+    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.1)));
 
     // Focused selected segment.
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pumpAndSettle();
-    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.1)));
+    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.1)));
   });
 }

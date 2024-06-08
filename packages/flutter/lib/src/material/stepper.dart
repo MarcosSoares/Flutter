@@ -926,7 +926,7 @@ class _StepperState extends State<Stepper> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     assert(debugCheckHasMaterialLocalizations(context));
     assert(() {
       if (context.findAncestorWidgetOfExactType<Stepper>() != null) {

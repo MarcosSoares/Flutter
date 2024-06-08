@@ -5428,9 +5428,9 @@ void main() {
       theme: theme,
     ));
 
-    RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
-    expect(inkFeatures, isNot(paints..rect(color: theme.hoverColor)));
-    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 0));
+    InkController inkController = tester.inkController;
+    expect(inkController, isNot(paints..rect(color: theme.hoverColor)));
+    expect(inkController, paintsExactlyCountTimes(#clipPath, 0));
 
     // Hover over the delete icon.
     final Offset centerOfDeleteButton = tester.getCenter(find.byType(Icon));
@@ -5439,14 +5439,14 @@ void main() {
     addTearDown(hoverGesture.removePointer);
     await tester.pumpAndSettle();
 
-    inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
-    expect(inkFeatures, paints..rect(color: theme.hoverColor));
-    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 1));
+    inkController = tester.inkController;
+    expect(inkController, paints..rect(color: theme.hoverColor));
+    expect(inkController, paintsExactlyCountTimes(#clipPath, 1));
 
     const Rect expectedClipRect = Rect.fromLTRB(124.7, 10.0, 142.7, 28.0);
     final Path expectedClipPath = Path()..addRect(expectedClipRect);
     expect(
-      inkFeatures,
+      inkController,
       paints..clipPath(pathMatcher: coversSameAreaAs(
         expectedClipPath,
         areaToCompare: expectedClipRect.inflate(48.0),

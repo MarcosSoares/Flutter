@@ -1050,6 +1050,6 @@ Future<void> _pointGestureToSwitch(WidgetTester tester) async {
   await gesture.moveTo(tester.getCenter(find.byType(Switch)));
 }
 
-MaterialInkController? _getSwitchMaterial(WidgetTester tester) {
+InkController? _getSwitchMaterial(WidgetTester tester) {
   return Material.of(tester.element(find.byType(Switch)));
 }

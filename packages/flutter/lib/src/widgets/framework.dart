@@ -2600,7 +2600,7 @@ abstract class BuildContext {
   /// Adds a description of a specific type of widget missing from the current
   /// build context's ancestry tree.
   ///
-  /// You can find an example of using this method in [debugCheckHasMaterial].
+  /// You can find an example of using this method in [debugCheckHasInkController].
   List<DiagnosticsNode> describeMissingAncestor({ required Type expectedAncestorType });
 
   /// Adds a description of the ownership chain from a specific [Element]

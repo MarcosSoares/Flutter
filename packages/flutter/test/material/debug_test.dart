@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('debugCheckHasMaterial control test', (WidgetTester tester) async {
+  testWidgets('debugCheckHasInkController control test', (WidgetTester tester) async {
     await tester.pumpWidget(const Center(child: Chip(label: Text('label'))));
     final dynamic exception = tester.takeException();
     expect(exception, isFlutterError);
@@ -17,9 +17,9 @@ void main() {
     expect(
       error.diagnostics[2].toStringDeep(),
       equalsIgnoringHashCodes(
-        'To introduce a Material widget, you can either directly include\n'
-        'one, or use a widget that contains Material itself, such as a\n'
-        'Card, Dialog, Drawer, or Scaffold.\n',
+        'To introduce an InkController, you can use an InkBox, or there\n'
+        'are several viable options from the Material libary, including\n'
+        'Material, Card, Dialog, Drawer, and Scaffold.\n',
       ),
     );
     expect(error.diagnostics[3], isA<DiagnosticsProperty<Element>>());
@@ -27,19 +27,19 @@ void main() {
     expect(
       error.toStringDeep(), startsWith(
       'FlutterError\n'
-      '   No Material widget found.\n'
-      '   Chip widgets require a Material widget ancestor within the\n'
-      '   closest LookupBoundary.\n'
-      '   In Material Design, most widgets are conceptually "printed" on a\n'
-      "   sheet of material. In Flutter's material library, that material\n"
-      '   is represented by the Material widget. It is the Material widget\n'
-      '   that renders ink splashes, for instance. Because of this, many\n'
-      '   material library widgets require that there be a Material widget\n'
-      '   in the tree above them.\n'
-      '   To introduce a Material widget, you can either directly include\n'
-      '   one, or use a widget that contains Material itself, such as a\n'
-      '   Card, Dialog, Drawer, or Scaffold.\n'
-      '   The specific widget that could not find a Material ancestor was:\n'
+      '   No InkController found.\n'
+      '   Chip widgets require an InkController ancestor within the closest\n'
+      '   LookupBoundary.\n'
+      '   Ink effects require an ancestor "ink controller" RenderBox in\n'
+      '   order to be properly displayed. This is usually accomplished with\n'
+      "   the InkBox widget, or with the Material widget from Flutter's\n"
+      '   material library. Because of this, several widgets require that\n'
+      '   there be an InkController in the tree above them.\n'
+      '   To introduce an InkController, you can use an InkBox, or there\n'
+      '   are several viable options from the Material libary, including\n'
+      '   Material, Card, Dialog, Drawer, and Scaffold.\n'
+      '   The specific widget that could not find a InkController ancestor\n'
+      '   was:\n'
       '     Chip\n'
       '   The ancestors of this widget were:\n'
       '     Center\n'

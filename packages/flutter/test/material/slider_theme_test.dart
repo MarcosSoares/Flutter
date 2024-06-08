@@ -157,7 +157,7 @@ void main() {
 
       await tester.pumpWidget(buildApp());
 
-      final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+      final InkController material = Material.of(tester.element(find.byType(Slider)));
 
       // Test default track height.
       const Radius radius = Radius.circular(trackHeight / 2);
@@ -303,7 +303,7 @@ void main() {
 
       await tester.pumpWidget(buildApp());
 
-      final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+      final InkController material = Material.of(tester.element(find.byType(Slider)));
       final RenderBox valueIndicatorBox = tester.renderObject(find.byType(Overlay));
 
       // Check default theme for enabled widget.
@@ -546,7 +546,7 @@ void main() {
 
       await tester.pumpWidget(buildApp());
 
-      final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+      final InkController material = Material.of(tester.element(find.byType(Slider)));
 
       // Test Slider parameters.
       expect(material, paints..rrect(color: activeTrackColor)..rrect(color: inactiveTrackColor)..rrect(color: secondaryActiveTrackColor));
@@ -569,7 +569,7 @@ void main() {
     );
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.5, secondaryTrackValue: 0.75, enabled: false));
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     expect(
       material,
@@ -593,7 +593,7 @@ void main() {
     );
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.5, secondaryTrackValue: 0.75, enabled: false));
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     expect(
       material,
@@ -702,7 +702,7 @@ void main() {
     final SliderThemeData sliderTheme = theme.sliderTheme.copyWith(thumbColor: Colors.red.shade500);
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.25, secondaryTrackValue: 0.5));
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     const Radius radius = Radius.circular(2);
     const Radius activatedRadius = Radius.circular(3);
@@ -738,7 +738,7 @@ void main() {
     final SliderThemeData sliderTheme = theme.sliderTheme.copyWith(thumbColor: Colors.red.shade500);
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.25));
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     // With no touch, paints only the thumb.
     expect(
@@ -859,7 +859,7 @@ void main() {
     final SliderThemeData sliderTheme = theme.sliderTheme.copyWith(thumbColor: Colors.red.shade500);
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.45));
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     expect(material, paints..circle(color: sliderTheme.thumbColor, radius: 10.0));
 
@@ -1270,7 +1270,7 @@ void main() {
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.25));
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     // Top and bottom are centerY (300) + and - trackRadius (8).
     expect(
@@ -1302,7 +1302,7 @@ void main() {
     );
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.25));
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     expect(
       material,
@@ -1326,7 +1326,7 @@ void main() {
     );
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.25));
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     expect(
       material,
@@ -1352,7 +1352,7 @@ void main() {
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.5, divisions: 2));
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     expect(
       material,
@@ -1388,7 +1388,7 @@ void main() {
     final TestGesture gesture = await tester.startGesture(center);
     await tester.pumpAndSettle();
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
     expect(
       material,
       paints..circle(
@@ -1412,7 +1412,7 @@ void main() {
 
     await tester.pumpWidget(_buildApp(sliderTheme, value: 0.5));
 
-    final MaterialInkController material = Material.of(
+    final InkController material = Material.of(
       tester.element(find.byType(Slider)),
     );
 
@@ -1453,7 +1453,7 @@ void main() {
 
     await tester.pumpWidget(_buildRangeApp(sliderTheme, values: const RangeValues(0.0, 1.0)));
 
-    final MaterialInkController material = Material.of(
+    final InkController material = Material.of(
       tester.element(find.byType(RangeSlider)),
     );
 
@@ -1511,7 +1511,7 @@ void main() {
       divisions: 4,
     ));
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     expect(material, paintsExactlyCountTimes(#drawRect, 0));
     expect(material, paintsExactlyCountTimes(#drawCircle, 0));
@@ -1531,7 +1531,7 @@ void main() {
       divisions: 4,
     ));
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     // Only 2 track segments.
     expect(material, paintsExactlyCountTimes(#drawRRect, 2));
@@ -1555,7 +1555,7 @@ void main() {
       divisions: 4,
     ));
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     // Only 5 tick marks.
     expect(material, paintsExactlyCountTimes(#drawRect, 0));
@@ -1578,7 +1578,7 @@ void main() {
         divisions: 4,
       ));
 
-      final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+      final InkController material = Material.of(tester.element(find.byType(Slider)));
 
       // Only 1 thumb.
       expect(material, paintsExactlyCountTimes(#drawRect, 0));
@@ -1602,7 +1602,7 @@ void main() {
       divisions: 4,
     ));
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
 
     // Tap the center of the track and wait for animations to finish.
     final Offset center = tester.getCenter(find.byType(Slider));
@@ -1631,7 +1631,7 @@ void main() {
       divisions: 4,
     ));
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
     final RenderBox valueIndicatorBox = tester.renderObject(find.byType(Overlay));
 
     // Tap the center of the track and wait for animations to finish.
@@ -1662,7 +1662,7 @@ void main() {
       divisions: 4,
     ));
 
-    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+    final InkController material = Material.of(tester.element(find.byType(Slider)));
     final RenderBox valueIndicatorBox = tester.renderObject(find.byType(Overlay));
 
     // Tap the center of the track to kick off the animation of the value indicator.
@@ -2491,7 +2491,7 @@ void main() {
 
         await tester.pumpWidget(buildApp());
 
-        final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
+        final InkController material = Material.of(tester.element(find.byType(Slider)));
         final RenderBox valueIndicatorBox = tester.renderObject(find.byType(Overlay));
 
         // Test default track height.

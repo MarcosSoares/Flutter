@@ -10,7 +10,6 @@ import 'package:flutter/widgets.dart';
 import 'checkbox.dart';
 import 'constants.dart';
 import 'data_table_theme.dart';
-import 'debug.dart';
 import 'divider.dart';
 import 'dropdown.dart';
 import 'icons.dart';
@@ -981,7 +980,7 @@ class DataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(!_debugInteractive || debugCheckHasMaterial(context));
+    assert(!_debugInteractive || debugCheckHasInkController(context));
 
     final ThemeData theme = Theme.of(context);
     final DataTableThemeData dataTableTheme = DataTableTheme.of(context);

@@ -4,7 +4,6 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'ink_well.dart' show InteractiveInkFeature;
 import 'material.dart';
 
 const Duration _kDefaultHighlightFadeDuration = Duration(milliseconds: 200);

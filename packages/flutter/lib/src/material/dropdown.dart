@@ -1462,7 +1462,7 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     assert(debugCheckHasMaterialLocalizations(context));
     final Orientation newOrientation = _getOrientation(context);
     _lastOrientation ??= newOrientation;

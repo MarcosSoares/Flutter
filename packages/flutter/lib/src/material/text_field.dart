@@ -1333,7 +1333,7 @@ class _TextFieldState extends State<TextField> with RestorationMixin implements 
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     assert(debugCheckHasMaterialLocalizations(context));
     assert(debugCheckHasDirectionality(context));
     assert(

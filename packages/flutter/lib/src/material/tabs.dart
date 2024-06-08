@@ -150,7 +150,7 @@ class Tab extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
 
     final double calculatedHeight;
     final Widget label;
@@ -1461,7 +1461,7 @@ class _TabBarState extends State<TabBar> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     _updateTabController();
     _initIndicatorPainter();
   }

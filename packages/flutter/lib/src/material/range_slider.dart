@@ -13,7 +13,6 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/widgets.dart';
 
 import 'constants.dart';
-import 'debug.dart';
 import 'material_state.dart';
 import 'slider_theme.dart';
 import 'theme.dart';
@@ -582,7 +581,7 @@ class _RangeSliderState extends State<RangeSlider> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     assert(debugCheckHasMediaQuery(context));
 
     final ThemeData theme = Theme.of(context);

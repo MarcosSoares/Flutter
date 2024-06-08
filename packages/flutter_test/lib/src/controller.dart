@@ -947,6 +947,22 @@ abstract class WidgetController {
     return allElements.map<RenderObject>((Element element) => element.renderObject!);
   }
 
+  /// Returns the first [InkController] found in the element tree.
+  ///
+  /// Produces the same output as:
+  /// ```dart
+  /// inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object is InkController);
+  /// ```
+  /// but with a smaller computation cost.
+  InkController get inkController {
+    for (final Element element in allElements) {
+      if (element.renderObject case final InkController controller) {
+        return controller;
+      }
+    }
+    throw StateError('no InkController found by tester $this');
+  }
+
   /// The render object of the matching widget in the widget tree.
   ///
   /// Throws a [StateError] if `finder` is empty or matches more than

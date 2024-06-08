@@ -177,7 +177,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     assert(debugCheckHasMaterialLocalizations(context));
     assert(debugCheckHasDirectionality(context));
     _localizations = MaterialLocalizations.of(context);
@@ -312,7 +312,7 @@ class _CalendarDatePickerState extends State<CalendarDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     assert(debugCheckHasMaterialLocalizations(context));
     assert(debugCheckHasDirectionality(context));
     return Stack(
@@ -1338,7 +1338,7 @@ class _YearPickerState extends State<YearPicker> {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     return Column(
       children: <Widget>[
         const Divider(),

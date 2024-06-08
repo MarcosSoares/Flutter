@@ -391,6 +391,6 @@ Future<void> _pointGestureToRadio(WidgetTester tester) async {
   await gesture.moveTo(tester.getCenter(_findRadio()));
 }
 
-MaterialInkController? _getRadioMaterial(WidgetTester tester) {
+InkController? _getRadioMaterial(WidgetTester tester) {
   return Material.of(tester.element(_findRadio()));
 }

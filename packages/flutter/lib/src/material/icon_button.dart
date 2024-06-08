@@ -13,7 +13,6 @@ import 'button_style_button.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
 import 'constants.dart';
-import 'debug.dart';
 import 'icon_button_theme.dart';
 import 'icons.dart';
 import 'ink_well.dart';
@@ -730,7 +729,7 @@ class IconButton extends StatelessWidget {
       );
     }
 
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
 
     Color? currentColor;
     if (onPressed != null) {

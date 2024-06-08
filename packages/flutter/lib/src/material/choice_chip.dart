@@ -9,7 +9,6 @@ import 'chip.dart';
 import 'chip_theme.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
-import 'debug.dart';
 import 'material_state.dart';
 import 'text_theme.dart';
 import 'theme.dart';
@@ -208,7 +207,7 @@ class ChoiceChip extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     final ChipThemeData chipTheme = ChipTheme.of(context);
     final ChipThemeData? defaults = Theme.of(context).useMaterial3
       ? _ChoiceChipDefaultsM3(context, isEnabled, selected, _chipVariant)

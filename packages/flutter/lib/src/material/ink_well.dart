@@ -13,177 +13,10 @@ import 'package:flutter/widgets.dart';
 import 'debug.dart';
 import 'ink_highlight.dart';
 import 'material.dart';
-import 'material_state.dart';
 import 'theme.dart';
 
 // Examples can assume:
 // late BuildContext context;
-
-/// An ink feature that displays a [color] "splash" in response to a user
-/// gesture that can be confirmed or canceled.
-///
-/// Subclasses call [confirm] when an input gesture is recognized. For
-/// example a press event might trigger an ink feature that's confirmed
-/// when the corresponding up event is seen.
-///
-/// Subclasses call [cancel] when an input gesture is aborted before it
-/// is recognized. For example a press event might trigger an ink feature
-/// that's canceled when the pointer is dragged out of the reference
-/// box.
-///
-/// The [InkWell] and [InkResponse] widgets generate instances of this
-/// class.
-abstract class InteractiveInkFeature extends InkFeature {
-  /// Creates an InteractiveInkFeature.
-  InteractiveInkFeature({
-    required super.controller,
-    required super.referenceBox,
-    required Color color,
-    ShapeBorder? customBorder,
-    super.onRemoved,
-  }) : _color = color,
-       _customBorder = customBorder;
-
-  /// Called when the user input that triggered this feature's appearance was confirmed.
-  ///
-  /// Typically causes the ink to propagate faster across the material. By default this
-  /// method does nothing.
-  void confirm() { }
-
-  /// Called when the user input that triggered this feature's appearance was canceled.
-  ///
-  /// Typically causes the ink to gradually disappear. By default this method does
-  /// nothing.
-  void cancel() { }
-
-  /// The ink's color.
-  Color get color => _color;
-  Color _color;
-  set color(Color value) {
-    if (value == _color) {
-      return;
-    }
-    _color = value;
-    controller.markNeedsPaint();
-  }
-
-  /// The ink's optional custom border.
-  ShapeBorder? get customBorder => _customBorder;
-  ShapeBorder? _customBorder;
-  set customBorder(ShapeBorder? value) {
-    if (value == _customBorder) {
-      return;
-    }
-    _customBorder = value;
-    controller.markNeedsPaint();
-  }
-
-  /// Draws an ink splash or ink ripple on the passed in [Canvas].
-  ///
-  /// The [transform] argument is the [Matrix4] transform that typically
-  /// shifts the coordinate space of the canvas to the space in which
-  /// the ink circle is to be painted.
-  ///
-  /// [center] is the [Offset] from origin of the canvas where the center
-  /// of the circle is drawn.
-  ///
-  /// [paint] takes a [Paint] object that describes the styles used to draw the ink circle.
-  /// For example, [paint] can specify properties like color, strokewidth, colorFilter.
-  ///
-  /// [radius] is the radius of ink circle to be drawn on canvas.
-  ///
-  /// [clipCallback] is the callback used to obtain the [Rect] used for clipping the ink effect.
-  /// If [clipCallback] is null, no clipping is performed on the ink circle.
-  ///
-  /// Clipping can happen in 3 different ways:
-  ///  1. If [customBorder] is provided, it is used to determine the path
-  ///     for clipping.
-  ///  2. If [customBorder] is null, and [borderRadius] is provided, the canvas
-  ///     is clipped by an [RRect] created from [clipCallback] and [borderRadius].
-  ///  3. If [borderRadius] is the default [BorderRadius.zero], then the [Rect] provided
-  ///      by [clipCallback] is used for clipping.
-  ///
-  /// [textDirection] is used by [customBorder] if it is non-null. This allows the [customBorder]'s path
-  /// to be properly defined if it was the path was expressed in terms of "start" and "end" instead of
-  /// "left" and "right".
-  ///
-  /// For examples on how the function is used, see [InkSplash] and [InkRipple].
-  @protected
-  void paintInkCircle({
-    required Canvas canvas,
-    required Matrix4 transform,
-    required Paint paint,
-    required Offset center,
-    required double radius,
-    TextDirection? textDirection,
-    ShapeBorder? customBorder,
-    BorderRadius borderRadius = BorderRadius.zero,
-    RectCallback? clipCallback,
-  }) {
-
-    final Offset? originOffset = MatrixUtils.getAsTranslation(transform);
-    canvas.save();
-    if (originOffset == null) {
-      canvas.transform(transform.storage);
-    } else {
-      canvas.translate(originOffset.dx, originOffset.dy);
-    }
-    if (clipCallback != null) {
-      final Rect rect = clipCallback();
-      if (customBorder != null) {
-        canvas.clipPath(customBorder.getOuterPath(rect, textDirection: textDirection));
-      } else if (borderRadius != BorderRadius.zero) {
-        canvas.clipRRect(RRect.fromRectAndCorners(
-          rect,
-          topLeft: borderRadius.topLeft, topRight: borderRadius.topRight,
-          bottomLeft: borderRadius.bottomLeft, bottomRight: borderRadius.bottomRight,
-        ));
-      } else {
-        canvas.clipRect(rect);
-      }
-    }
-    canvas.drawCircle(center, radius, paint);
-    canvas.restore();
-  }
-}
-
-/// An encapsulation of an [InteractiveInkFeature] constructor used by
-/// [InkWell], [InkResponse], and [ThemeData].
-///
-/// Interactive ink feature implementations should provide a static const
-/// `splashFactory` value that's an instance of this class. The `splashFactory`
-/// can be used to configure an [InkWell], [InkResponse] or [ThemeData].
-///
-/// See also:
-///
-///  * [InkSplash.splashFactory]
-///  * [InkRipple.splashFactory]
-abstract class InteractiveInkFeatureFactory {
-  /// Abstract const constructor. This constructor enables subclasses to provide
-  /// const constructors so that they can be used in const expressions.
-  ///
-  /// Subclasses should provide a const constructor.
-  const InteractiveInkFeatureFactory();
-
-  /// The factory method.
-  ///
-  /// Subclasses should override this method to return a new instance of an
-  /// [InteractiveInkFeature].
-  @factory
-  InteractiveInkFeature create({
-    required MaterialInkController controller,
-    required RenderBox referenceBox,
-    required Offset position,
-    required Color color,
-    required TextDirection textDirection,
-    bool containedInkWell = false,
-    RectCallback? rectCallback,
-    BorderRadius? borderRadius,
-    ShapeBorder? customBorder,
-    double? radius,
-    VoidCallback? onRemoved,
-  });
-}
 
 abstract class _ParentInkResponseState {
   void markChildInkResponsePressed(_ParentInkResponseState childState, bool value);
@@ -257,11 +90,11 @@ typedef _CheckContext = bool Function(BuildContext context);
 /// matches the Material Design premise wherein the [Material] is what is
 /// actually reacting to touches by spreading ink.
 ///
-/// If a Widget uses this class directly, it should include the following line
-/// at the top of its build function to call [debugCheckHasMaterial]:
+/// If a Widget uses this class directly, it should call [debugCheckHasInkController]
+/// at the top of its build method:
 ///
 /// ```dart
-/// assert(debugCheckHasMaterial(context));
+/// assert(debugCheckHasInkController(context));
 /// ```
 ///
 /// ## Troubleshooting
@@ -394,14 +227,14 @@ class InkResponse extends StatelessWidget {
   /// The cursor for a mouse pointer when it enters or is hovering over the
   /// widget.
   ///
-  /// If [mouseCursor] is a [MaterialStateProperty<MouseCursor>],
-  /// [MaterialStateProperty.resolve] is used for the following [MaterialState]s:
+  /// If [mouseCursor] is a [WidgetStateProperty<MouseCursor>],
+  /// [WidgetStateProperty.resolve] is used for the following [WidgetState]s:
   ///
-  ///  * [MaterialState.hovered].
-  ///  * [MaterialState.focused].
-  ///  * [MaterialState.disabled].
+  ///  * [WidgetState.hovered].
+  ///  * [WidgetState.focused].
+  ///  * [WidgetState.disabled].
   ///
-  /// If this property is null, [MaterialStateMouseCursor.clickable] will be used.
+  /// If this property is null, [WidgetStateMouseCursor.clickable] will be used.
   final MouseCursor? mouseCursor;
 
   /// Whether this ink response should be clipped its bounds.
@@ -510,12 +343,12 @@ class InkResponse extends StatelessWidget {
   /// This default null property can be used as an alternative to
   /// [focusColor], [hoverColor], [highlightColor], and
   /// [splashColor]. If non-null, it is resolved against one of
-  /// [MaterialState.focused], [MaterialState.hovered], and
-  /// [MaterialState.pressed]. It's convenient to use when the parent
-  /// widget can pass along its own MaterialStateProperty value for
+  /// [WidgetState.focused], [WidgetState.hovered], and
+  /// [WidgetState.pressed]. It's convenient to use when the parent
+  /// widget can pass along its own WidgetStateProperty value for
   /// the overlay color.
   ///
-  /// [MaterialState.pressed] triggers a ripple (an ink splash), per
+  /// [WidgetState.pressed] triggers a ripple (an ink splash), per
   /// the current Material Design spec. The [overlayColor] doesn't map
   /// a state to [highlightColor] because a separate highlight is not
   /// used by the current design guidelines. See
@@ -529,7 +362,7 @@ class InkResponse extends StatelessWidget {
   ///  * The Material Design specification for overlay colors and how they
   ///    match a component's state:
   ///    <https://material.io/design/interaction/states.html#anatomy>.
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? overlayColor;
 
   /// The splash color of the ink response. If this property is null then the
   /// splash color of the theme, [ThemeData.splashColor], will be used.
@@ -606,16 +439,16 @@ class InkResponse extends StatelessWidget {
 
   /// {@template flutter.material.inkwell.statesController}
   /// Represents the interactive "state" of this widget in terms of
-  /// a set of [MaterialState]s, like [MaterialState.pressed] and
-  /// [MaterialState.focused].
+  /// a set of [WidgetState]s, like [WidgetState.pressed] and
+  /// [WidgetState.focused].
   ///
   /// Classes based on this one can provide their own
-  /// [MaterialStatesController] to which they've added listeners.
-  /// They can also update the controller's [MaterialStatesController.value]
+  /// [WidgetStatesController] to which they've added listeners.
+  /// They can also update the controller's [WidgetStatesController.value]
   /// however, this may only be done when it's safe to call
   /// [State.setState], like in an event handler.
   /// {@endtemplate}
-  final MaterialStatesController? statesController;
+  final WidgetStatesController? statesController;
 
   /// The duration of the animation that animates the hover effect.
   ///
@@ -742,7 +575,7 @@ class _InkResponseStateWidget extends StatefulWidget {
   final Color? focusColor;
   final Color? hoverColor;
   final Color? highlightColor;
-  final MaterialStateProperty<Color?>? overlayColor;
+  final WidgetStateProperty<Color?>? overlayColor;
   final Color? splashColor;
   final InteractiveInkFeatureFactory? splashFactory;
   final bool enableFeedback;
@@ -754,7 +587,7 @@ class _InkResponseStateWidget extends StatefulWidget {
   final _ParentInkResponseState? parentState;
   final _GetRectCallback? getRectCallback;
   final _CheckContext debugCheckContext;
-  final MaterialStatesController? statesController;
+  final WidgetStatesController? statesController;
   final Duration? hoverDuration;
 
   @override
@@ -807,7 +640,7 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     ActivateIntent: CallbackAction<ActivateIntent>(onInvoke: activateOnIntent),
     ButtonActivateIntent: CallbackAction<ButtonActivateIntent>(onInvoke: activateOnIntent),
   };
-  MaterialStatesController? internalStatesController;
+  WidgetStatesController? internalStatesController;
 
   bool get highlightsExist => _highlights.values.where((InkHighlight? highlight) => highlight != null).isNotEmpty;
 
@@ -844,7 +677,7 @@ class _InkResponseState extends State<_InkResponseStateWidget>
       widget.onTap?.call();
     }
     // Delay the call to `updateHighlight` to simulate a pressed delay
-    // and give MaterialStatesController listeners a chance to react.
+    // and give WidgetStatesController listeners a chance to react.
     _activationTimer = Timer(_activationDuration, () {
       updateHighlight(_HighlightType.pressed, value: false);
     });
@@ -865,13 +698,13 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     setState(() { });
   }
 
-  MaterialStatesController get statesController => widget.statesController ?? internalStatesController!;
+  WidgetStatesController get statesController => widget.statesController ?? internalStatesController!;
 
   void initStatesController() {
     if (widget.statesController == null) {
-      internalStatesController = MaterialStatesController();
+      internalStatesController = WidgetStatesController();
     }
-    statesController.update(MaterialState.disabled, !enabled);
+    statesController.update(WidgetState.disabled, !enabled);
     statesController.addListener(handleStatesControllerChange);
   }
 
@@ -911,9 +744,9 @@ class _InkResponseState extends State<_InkResponseStateWidget>
       _updateHighlightsAndSplashes();
     }
     if (enabled != isWidgetEnabled(oldWidget)) {
-      statesController.update(MaterialState.disabled, !enabled);
+      statesController.update(WidgetState.disabled, !enabled);
       if (!enabled) {
-        statesController.update(MaterialState.pressed, false);
+        statesController.update(WidgetState.pressed, false);
         // Remove the existing hover highlight immediately when enabled is false.
         // Do not rely on updateHighlight or InkHighlight.deactivate to not break
         // the expected lifecycle which is updating _hovering when the mouse exit.
@@ -962,10 +795,10 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 
     switch (type) {
       case _HighlightType.pressed:
-        statesController.update(MaterialState.pressed, value);
+        statesController.update(WidgetState.pressed, value);
       case _HighlightType.hover:
         if (callOnHover) {
-          statesController.update(MaterialState.hovered, value);
+          statesController.update(WidgetState.hovered, value);
         }
       case _HighlightType.focus:
         // see handleFocusUpdate()
@@ -1105,10 +938,10 @@ class _InkResponseState extends State<_InkResponseStateWidget>
   void handleFocusUpdate(bool hasFocus) {
     _hasFocus = hasFocus;
     // Set here rather than updateHighlight because this widget's
-    // (MaterialState) states include MaterialState.focused if
+    // (WidgetState) states include WidgetState.focused if
     // the InkWell _has_ the focus, rather than if it's showing
     // the focus per FocusManager.instance.highlightMode.
-    statesController.update(MaterialState.focused, hasFocus);
+    statesController.update(WidgetState.focused, hasFocus);
     updateFocusHighlights();
     widget.onFocusChange?.call(hasFocus);
   }
@@ -1149,7 +982,7 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     } else {
       globalPosition = details!.globalPosition;
     }
-    statesController.update(MaterialState.pressed, true); // ... before creating the splash
+    statesController.update(WidgetState.pressed, true); // ... before creating the splash
     final InteractiveInkFeature splash = _createSplash(globalPosition);
     _splashes ??= HashSet<InteractiveInkFeature>();
     _splashes!.add(splash);
@@ -1282,9 +1115,9 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     super.build(context); // See AutomaticKeepAliveClientMixin.
 
     Color getHighlightColorForType(_HighlightType type) {
-      const Set<MaterialState> pressed = <MaterialState>{MaterialState.pressed};
-      const Set<MaterialState> focused = <MaterialState>{MaterialState.focused};
-      const Set<MaterialState> hovered = <MaterialState>{MaterialState.hovered};
+      const Set<WidgetState> pressed = <WidgetState>{WidgetState.pressed};
+      const Set<WidgetState> focused = <WidgetState>{WidgetState.focused};
+      const Set<WidgetState> hovered = <WidgetState>{WidgetState.hovered};
 
       final ThemeData theme = Theme.of(context);
       return switch (type) {
@@ -1302,8 +1135,8 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 
     _currentSplash?.color = widget.overlayColor?.resolve(statesController.value) ?? widget.splashColor ?? Theme.of(context).splashColor;
 
-    final MouseCursor effectiveMouseCursor = MaterialStateProperty.resolveAs<MouseCursor>(
-      widget.mouseCursor ?? MaterialStateMouseCursor.clickable,
+    final MouseCursor effectiveMouseCursor = WidgetStateProperty.resolveAs<MouseCursor>(
+      widget.mouseCursor ?? WidgetStateMouseCursor.clickable,
       statesController.value,
     );
 
@@ -1363,11 +1196,11 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 /// matches the Material Design premise wherein the [Material] is what is
 /// actually reacting to touches by spreading ink.
 ///
-/// If a Widget uses this class directly, it should include the following line
-/// at the top of its build function to call [debugCheckHasMaterial]:
+/// If a Widget uses this class directly, it should call [debugCheckHasInkController]
+/// at the top of its build method:
 ///
 /// ```dart
-/// assert(debugCheckHasMaterial(context));
+/// assert(debugCheckHasInkController(context));
 /// ```
 ///
 /// ## Troubleshooting
@@ -1380,27 +1213,21 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 /// This is because ink splashes draw on the underlying [Material] itself, as
 /// if the ink was spreading inside the material.
 ///
-/// The [Ink] widget can be used as a replacement for [Image], [Container], or
-/// [DecoratedBox] to ensure that the image or decoration also paints in the
-/// [Material] itself, below the ink.
+/// Replacing the opaque widget with a [Material] allows the ink splash to be shown.
 ///
-/// If this is not possible for some reason, e.g. because you are using an
-/// opaque [CustomPaint] widget, alternatively consider using a second
-/// [Material] above the opaque widget but below the [InkWell] (as an
-/// ancestor to the ink well). The [MaterialType.transparency] material
-/// kind can be used for this purpose.
+/// Alternatively, an [InkBox] can be set as the opaque widget's child, and
+/// ink effects will be visible on top of it.
 ///
 /// ### InkWell isn't clipping properly
 ///
-/// If you want to clip an InkWell or any [Ink] widgets you need to keep in mind
-/// that the [Material] that the Ink will be printed on is responsible for clipping.
-/// This means you can't wrap the [Ink] widget in a clipping widget directly,
-/// since this will leave the [Material] not clipped (and by extension the printed
-/// [Ink] widgets as well).
+/// In order to clip an InkWell (or any other [InkFeature] widgets), clipping should
+/// be applied to the widget providing the [InkController], which could be a [Material]
+/// or an [InkBox].
 ///
-/// An easy solution is to deliberately wrap the [Ink] widgets you want to clip
-/// in a [Material], and wrap that in a clipping widget instead. See [Ink] for
-/// an example.
+/// If, for example, the ancestor [InkController] is supplied by a [Scaffold],
+/// clipping the ancestor might be undesirable. In this case, the InkWell can
+/// be wrapped in an [InkBox], so that clipping, resizing, and ink effects are
+/// no longer directly tied to the [Scaffold].
 ///
 /// ### The ink splashes don't track the size of an animated container
 /// If the size of an InkWell's [Material] ancestor changes while the InkWell's

@@ -263,11 +263,11 @@ void main() {
     await gesture.moveTo(tester.getCenter(find.byType(NavigationIndicator).last));
     await tester.pumpAndSettle();
 
-    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    final InkController inkController = tester.inkController;
 
     // Test hovered state.
     expect(
-      inkFeatures,
+      inkController,
       kIsWeb
         ? (paints..rrect()..rrect()..circle(color: hoverColor))
         : (paints..circle(color: hoverColor)),
@@ -278,7 +278,7 @@ void main() {
 
     // Test pressed state.
     expect(
-      inkFeatures,
+      inkController,
       kIsWeb
         ? (paints..circle()..circle()..circle(color: pressedColor))
         : (paints..circle()..circle(color: pressedColor)),
@@ -293,7 +293,7 @@ void main() {
 
     // Test focused state.
     expect(
-      inkFeatures,
+      inkController,
       kIsWeb ? (paints..circle()..circle(color: focusColor)) : (paints..circle()..circle(color: focusColor)),
     );
   });

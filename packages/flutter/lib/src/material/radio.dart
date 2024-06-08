@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
 import 'constants.dart';
-import 'debug.dart';
 import 'material_state.dart';
 import 'radio_theme.dart';
 import 'theme.dart';
@@ -428,7 +427,7 @@ class _RadioState<T> extends State<Radio<T>> with TickerProviderStateMixin, Togg
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     switch (widget._radioType) {
       case _RadioType.material:
         break;

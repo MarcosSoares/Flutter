@@ -41,7 +41,7 @@ class _InkRippleFactory extends InteractiveInkFeatureFactory {
 
   @override
   InteractiveInkFeature create({
-    required MaterialInkController controller,
+    required InkController controller,
     required RenderBox referenceBox,
     required Offset position,
     required Color color,
@@ -108,7 +108,7 @@ class InkRipple extends InteractiveInkFeature {
   ///
   /// When the ripple is removed, [onRemoved] will be called.
   InkRipple({
-    required MaterialInkController controller,
+    required InkController controller,
     required super.referenceBox,
     required Offset position,
     required Color color,

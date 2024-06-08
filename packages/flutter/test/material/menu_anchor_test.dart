@@ -167,10 +167,6 @@ void main() {
     );
   }
 
-  RenderObject getOverlayColor(WidgetTester tester) {
-    return tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
-  }
-
   testWidgets('Menu responds to density changes', (WidgetTester tester) async {
     Widget buildMenu({VisualDensity? visualDensity = VisualDensity.standard}) {
       return MaterialApp(
@@ -2559,13 +2555,13 @@ void main() {
       await gesture.addPointer();
       await gesture.moveTo(center);
       await tester.pumpAndSettle();
-      expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.08)));
+      expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.08)));
 
       // Highlighted (pressed).
       await gesture.down(center);
       await tester.pumpAndSettle();
       expect(
-        getOverlayColor(tester),
+        tester.inkController,
         paints
           ..rect(color: overlayColor.withOpacity(0.08))
           ..rect(color: overlayColor.withOpacity(0.08))
@@ -3830,13 +3826,13 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.08)));
+    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.08)));
 
     // Highlighted (pressed).
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(
-      getOverlayColor(tester),
+      tester.inkController,
       paints
         ..rect(color: overlayColor.withOpacity(0.08))
         ..rect(color: overlayColor.withOpacity(0.08))

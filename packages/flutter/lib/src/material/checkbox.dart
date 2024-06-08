@@ -8,7 +8,6 @@ import 'checkbox_theme.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
 import 'constants.dart';
-import 'debug.dart';
 import 'material_state.dart';
 import 'theme.dart';
 import 'theme_data.dart';
@@ -499,7 +498,7 @@ class _CheckboxState extends State<Checkbox> with TickerProviderStateMixin, Togg
         }
     }
 
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     final CheckboxThemeData checkboxTheme = CheckboxTheme.of(context);
     final CheckboxThemeData defaults = Theme.of(context).useMaterial3
       ? _CheckboxDefaultsM3(context)

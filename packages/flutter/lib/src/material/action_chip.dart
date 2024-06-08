@@ -9,7 +9,6 @@ import 'chip.dart';
 import 'chip_theme.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
-import 'debug.dart';
 import 'material_state.dart';
 import 'text_theme.dart';
 import 'theme.dart';
@@ -207,7 +206,7 @@ class ActionChip extends StatelessWidget implements ChipAttributes, TappableChip
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     final ChipThemeData? defaults = Theme.of(context).useMaterial3
       ? _ActionChipDefaultsM3(context, isEnabled, _chipVariant)
       : null;

@@ -321,6 +321,19 @@ void main() {
     expect(pressed, isTrue);
   });
 
+  testWidgets('Material.of(context) works with InkBox', (WidgetTester tester) async {
+    Color? color;
+
+    await tester.pumpWidget(InkBox(
+      color: Colors.cyan,
+      child: Builder(builder: (BuildContext context) {
+        color = Material.of(context).color;
+        return const SizedBox.shrink();
+      }),
+    ));
+    expect(color, Colors.cyan);
+  });
+
   group('Surface Tint Overlay', () {
     testWidgets('applyElevationOverlayColor does not effect anything with useMaterial3 set to true', (WidgetTester tester) async {
       const Color surfaceColor = Color(0xFF121212);
@@ -1087,7 +1100,7 @@ void main() {
         child: SizedBox(key: sizedBoxKey, width: 20, height: 20),
       ),
     ));
-    final MaterialInkController controller = Material.of(sizedBoxKey.currentContext!);
+    final InkController controller = Material.of(sizedBoxKey.currentContext!);
 
     final TrackPaintInkFeature tracker = TrackPaintInkFeature(
       controller: controller,
@@ -1132,7 +1145,7 @@ void main() {
     );
 
     final Element element = tester.element(find.byType(SizedBox));
-    final MaterialInkController controller = Material.of(element);
+    final InkController controller = Material.of(element);
     final RenderBox referenceBox = element.findRenderObject()! as RenderBox;
 
     await expectLater(
@@ -1149,7 +1162,7 @@ void main() {
 
   group('LookupBoundary', () {
     testWidgets('hides Material from Material.maybeOf', (WidgetTester tester) async {
-      MaterialInkController? material;
+      InkController? material;
 
       await tester.pumpWidget(
         Material(
@@ -1199,13 +1212,13 @@ void main() {
       );
     });
 
-    testWidgets('hides Material from debugCheckHasMaterial', (WidgetTester tester) async {
+    testWidgets('hides Material from debugCheckHasInkController', (WidgetTester tester) async {
       await tester.pumpWidget(
         Material(
           child: LookupBoundary(
             child: Builder(
               builder: (BuildContext context) {
-                debugCheckHasMaterial(context);
+                debugCheckHasInkController(context);
                 return Container();
               },
             ),
@@ -1219,21 +1232,21 @@ void main() {
       expect(
         error.toStringDeep(), startsWith(
           'FlutterError\n'
-          '   No Material widget found within the closest LookupBoundary.\n'
-          '   There is an ancestor Material widget, but it is hidden by a\n'
+          '   No InkController found within the closest LookupBoundary.\n'
+          '   There is an ancestor InkBox widget, but it is hidden by a\n'
           '   LookupBoundary.\n'
-          '   Builder widgets require a Material widget ancestor within the\n'
+          '   Builder widgets require an InkController ancestor within the\n'
           '   closest LookupBoundary.\n'
-          '   In Material Design, most widgets are conceptually "printed" on a\n'
-          "   sheet of material. In Flutter's material library, that material\n"
-          '   is represented by the Material widget. It is the Material widget\n'
-          '   that renders ink splashes, for instance. Because of this, many\n'
-          '   material library widgets require that there be a Material widget\n'
-          '   in the tree above them.\n'
-          '   To introduce a Material widget, you can either directly include\n'
-          '   one, or use a widget that contains Material itself, such as a\n'
-          '   Card, Dialog, Drawer, or Scaffold.\n'
-          '   The specific widget that could not find a Material ancestor was:\n'
+          '   Ink effects require an ancestor "ink controller" RenderBox in\n'
+          '   order to be properly displayed. This is usually accomplished with\n'
+          "   the InkBox widget, or with the Material widget from Flutter's\n"
+          '   material library. Because of this, several widgets require that\n'
+          '   there be an InkController in the tree above them.\n'
+          '   To introduce an InkController, you can use an InkBox, or there\n'
+          '   are several viable options from the Material libary, including\n'
+          '   Material, Card, Dialog, Drawer, and Scaffold.\n'
+          '   The specific widget that could not find a InkController ancestor\n'
+          '   was:\n'
           '     Builder\n'
           '   The ancestors of this widget were:\n'
           '     LookupBoundary\n'

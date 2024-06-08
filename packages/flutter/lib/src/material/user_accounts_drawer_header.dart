@@ -356,7 +356,7 @@ class _UserAccountsDrawerHeaderState extends State<UserAccountsDrawerHeader> {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     assert(debugCheckHasMaterialLocalizations(context));
     return Semantics(
       container: true,

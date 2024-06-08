@@ -1350,7 +1350,7 @@ void main() {
       return find.byWidgetPredicate((Widget widget) => widget is Radio<bool>);
     }
 
-    MaterialInkController? getRadioMaterial(WidgetTester tester) {
+    InkController? getRadioMaterial(WidgetTester tester) {
       return Material.of(tester.element(findRadio()));
     }
 
@@ -1868,7 +1868,7 @@ void main() {
       return find.byWidgetPredicate((Widget widget) => widget is Radio<bool>);
     }
 
-    MaterialInkController? getRadioMaterial(WidgetTester tester) {
+    InkController? getRadioMaterial(WidgetTester tester) {
       return Material.of(tester.element(findRadio()));
     }
     await tester.pumpWidget(MaterialApp(
@@ -1935,7 +1935,7 @@ void main() {
       return find.byWidgetPredicate((Widget widget) => widget is Radio<bool>);
     }
 
-    MaterialInkController? getRadioMaterial(WidgetTester tester) {
+    InkController? getRadioMaterial(WidgetTester tester) {
       return Material.of(tester.element(findRadio()));
     }
     await tester.pumpWidget(MaterialApp(

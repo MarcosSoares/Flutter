@@ -15,7 +15,6 @@ import 'package:flutter/services.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
 import 'constants.dart';
-import 'debug.dart';
 import 'material.dart';
 import 'material_state.dart';
 import 'slider_theme.dart';
@@ -748,7 +747,7 @@ class _SliderState extends State<Slider> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMaterial(context));
+    assert(debugCheckHasInkController(context));
     assert(debugCheckHasMediaQuery(context));
 
     switch (widget._sliderType) {

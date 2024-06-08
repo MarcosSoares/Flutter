@@ -8,10 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  RenderObject getOverlayColor(WidgetTester tester) {
-    return tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
-  }
-
   test('IconButtonThemeData lerp special cases', () {
     expect(IconButtonThemeData.lerp(null, null, 0), null);
     const IconButtonThemeData data = IconButtonThemeData();
@@ -291,13 +287,13 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.08)));
+    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.08)));
 
     // Highlighted (pressed).
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(
-      getOverlayColor(tester),
+      tester.inkController,
       paints
         ..rect(color: overlayColor.withOpacity(0.08))
         ..rect(color: overlayColor.withOpacity(0.1)),
@@ -311,6 +307,6 @@ void main() {
     // Focused.
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pumpAndSettle();
-    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.1)));
+    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.1)));
   });
 }
