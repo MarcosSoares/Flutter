@@ -240,7 +240,7 @@ class _BorderContainerState extends State<_BorderContainer> with TickerProviderS
       _hoverColorTween = ColorTween(begin: Colors.transparent, end: widget.hoverColor);
     }
     if (widget.isHovering != oldWidget.isHovering) {
-      _hoverColorController.toggle(widget.isHovering);
+      _hoverColorController.toggle(forward: widget.isHovering);
     }
   }
 
@@ -392,7 +392,7 @@ class _HelperErrorState extends State<_HelperError> with SingleTickerProviderSta
       } else if (newHelper != null || newHelperText != null) {
         _helper = _buildHelper();
       }
-      _controller.toggle(hasError);
+      _controller.toggle(forward: hasError);
     }
   }
 
@@ -1935,7 +1935,7 @@ class _InputDecoratorState extends State<InputDecorator> with TickerProviderStat
 
     if (widget._labelShouldWithdraw != old._labelShouldWithdraw || floatBehaviorChanged) {
       _floatingLabelController.toggle(
-        _floatingLabelEnabled && widget._labelShouldWithdraw,
+        forward: _floatingLabelEnabled && widget._labelShouldWithdraw,
       );
     }
 

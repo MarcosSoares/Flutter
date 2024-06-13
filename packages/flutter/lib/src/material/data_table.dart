@@ -1334,10 +1334,10 @@ class _SortArrowState extends State<_SortArrow> with TickerProviderStateMixin {
         _orientationOffset = newUp! ? 0.0 : math.pi;
         skipArrow = true;
       }
-      _opacityController.toggle(widget.visible);
+      _opacityController.toggle(forward: widget.visible);
     }
     if ((_up != newUp) && !skipArrow) {
-      _orientationController.toggle(_orientationController.isDismissed);
+      _orientationController.toggle(forward: _orientationController.isDismissed);
     }
     _up = newUp;
   }

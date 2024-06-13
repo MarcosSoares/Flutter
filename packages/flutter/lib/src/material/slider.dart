@@ -1289,7 +1289,7 @@ class _RenderSlider extends RenderBox with RelayoutWhenSystemFontsChangeMixin {
     final bool wasInteractive = isInteractive;
     _onChanged = value;
     if (wasInteractive != isInteractive) {
-      _state.enableController.toggle(isInteractive);
+      _state.enableController.toggle(forward: isInteractive);
       markNeedsPaint();
       markNeedsSemanticsUpdate();
     }

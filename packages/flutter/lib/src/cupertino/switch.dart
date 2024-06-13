@@ -274,7 +274,7 @@ class _CupertinoSwitchState extends State<CupertinoSwitch> with TickerProviderSt
     position
       ..curve = isLinear ? Curves.linear : Curves.ease
       ..reverseCurve = isLinear ? Curves.linear : Curves.ease.flipped;
-    _positionController.toggle(widget.value);
+    _positionController.toggle(forward: widget.value);
   }
 
   void _handleTapDown(TapDownDetails details) {
