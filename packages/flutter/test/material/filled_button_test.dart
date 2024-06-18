@@ -385,6 +385,10 @@ void main() {
       ),
     );
 
+    RenderObject overlayColor() {
+      return tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    }
+
     double elevation() {
       return tester.widget<PhysicalShape>(
         find.descendant(
@@ -403,13 +407,13 @@ void main() {
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
     expect(elevation(), 1.0);
-    expect(tester.inkController, paints..rect(color: theme.colorScheme.onPrimary.withOpacity(0.08)));
+    expect(overlayColor(), paints..rect(color: theme.colorScheme.onPrimary.withOpacity(0.08)));
 
     // Highlighted (pressed).
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(elevation(), 0.0);
-    expect(tester.inkController, paints..rect()..rect(color: theme.colorScheme.onPrimary.withOpacity(0.1)));
+    expect(overlayColor(), paints..rect()..rect(color: theme.colorScheme.onPrimary.withOpacity(0.1)));
     // Remove pressed and hovered states
     await gesture.up();
     await tester.pumpAndSettle();
@@ -420,7 +424,7 @@ void main() {
     focusNode.requestFocus();
     await tester.pumpAndSettle();
     expect(elevation(), 0.0);
-    expect(tester.inkController, paints..rect(color: theme.colorScheme.onPrimary.withOpacity(0.1)));
+    expect(overlayColor(), paints..rect(color: theme.colorScheme.onPrimary.withOpacity(0.1)));
     focusNode.dispose();
   });
 
@@ -447,6 +451,10 @@ void main() {
       ),
     );
 
+    RenderObject overlayColor() {
+      return tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    }
+
     double elevation() {
       return tester.widget<PhysicalShape>(
         find.descendant(
@@ -465,13 +473,13 @@ void main() {
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
     expect(elevation(), 1.0);
-    expect(tester.inkController, paints..rect(color: theme.colorScheme.onSecondaryContainer.withOpacity(0.08)));
+    expect(overlayColor(), paints..rect(color: theme.colorScheme.onSecondaryContainer.withOpacity(0.08)));
 
     // Highlighted (pressed).
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(elevation(), 0.0);
-    expect(tester.inkController, paints..rect()..rect(color: theme.colorScheme.onSecondaryContainer.withOpacity(0.1)));
+    expect(overlayColor(), paints..rect()..rect(color: theme.colorScheme.onSecondaryContainer.withOpacity(0.1)));
     // Remove pressed and hovered states
     await gesture.up();
     await tester.pumpAndSettle();
@@ -482,7 +490,7 @@ void main() {
     focusNode.requestFocus();
     await tester.pumpAndSettle();
     expect(elevation(), 0.0);
-    expect(tester.inkController, paints..rect(color: theme.colorScheme.onSecondaryContainer.withOpacity(0.1)));
+    expect(overlayColor(), paints..rect(color: theme.colorScheme.onSecondaryContainer.withOpacity(0.1)));
     focusNode.dispose();
   });
 
@@ -903,7 +911,8 @@ void main() {
     await gesture.moveTo(tester.getCenter(find.byType(FilledButton)));
     await tester.pumpAndSettle();
 
-    expect(tester.inkController, paints..rect(color: hoverColor));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect(color: hoverColor));
   });
 
   testWidgets('Does FilledButton work with focus', (WidgetTester tester) async {
@@ -930,7 +939,8 @@ void main() {
     focusNode.requestFocus();
     await tester.pumpAndSettle();
 
-    expect(tester.inkController, paints..rect(color: focusColor));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect(color: focusColor));
     focusNode.dispose();
   });
 
@@ -960,7 +970,8 @@ void main() {
     FocusManager.instance.highlightStrategy = FocusHighlightStrategy.alwaysTraditional;
     await tester.pumpAndSettle();
 
-    expect(tester.inkController, paints..rect(color: focusColor));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect(color: focusColor));
     focusNode.dispose();
   });
 

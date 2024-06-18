@@ -302,6 +302,10 @@ TextStyle? getIconStyle(WidgetTester tester, IconData icon) {
   return iconRichText.text.style;
 }
 
+RenderObject getOverlayColor(WidgetTester tester) {
+  return tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+}
+
 void main() {
   // TODO(bleroux): migrate all M2 tests to M3.
   // See https://github.com/flutter/flutter/issues/139076
@@ -7792,7 +7796,7 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: overlayColor));
+    expect(getOverlayColor(tester), paints..rect(color: overlayColor));
   });
 
   testWidgets('Suffix IconButton inherits IconButtonTheme', (WidgetTester tester) async {
@@ -7847,7 +7851,7 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: overlayColor));
+    expect(getOverlayColor(tester), paints..rect(color: overlayColor));
   });
 
   testWidgets('Prefix IconButton color respects IconButtonTheme foreground color states', (WidgetTester tester) async {

@@ -428,7 +428,7 @@ void main() {
     expect(day24Shape.side.width, datePickerTheme.todayBorder?.width);
 
     // Test the day overlay color.
-    final RenderObject inkFeatures = tester.inkController;
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
     final TestGesture gesture = await tester.createGesture(
       kind: PointerDeviceKind.mouse,
     );
@@ -563,19 +563,19 @@ void main() {
     expect(selectedDate.style?.fontSize, datePickerTheme.rangePickerHeaderHeadlineStyle?.fontSize);
 
     // Test the day overlay color.
-    final InkController inkController = tester.inkController;
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
     final TestGesture gesture = await tester.createGesture(
       kind: PointerDeviceKind.mouse,
     );
     await gesture.addPointer();
     await gesture.moveTo(tester.getCenter(find.text('16')));
     await tester.pumpAndSettle();
-    expect(inkController, paints..circle(color: datePickerTheme.dayOverlayColor?.resolve(<MaterialState>{})));
+    expect(inkFeatures, paints..circle(color: datePickerTheme.dayOverlayColor?.resolve(<MaterialState>{})));
 
     // Test the range selection overlay color.
     await gesture.moveTo(tester.getCenter(find.text('18')));
     await tester.pumpAndSettle();
-    expect(inkController, paints..circle(color: datePickerTheme.rangeSelectionOverlayColor?.resolve(<MaterialState>{})));
+    expect(inkFeatures, paints..circle(color: datePickerTheme.rangeSelectionOverlayColor?.resolve(<MaterialState>{})));
   });
 
   testWidgets('Material2 - DateRangePickerDialog uses ThemeData datePicker theme', (WidgetTester tester) async {
@@ -624,19 +624,19 @@ void main() {
     expect(selectedDate.style?.fontSize, datePickerTheme.rangePickerHeaderHeadlineStyle?.fontSize);
 
     // Test the day overlay color.
-    final InkController inkController = tester.inkController;
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
     final TestGesture gesture = await tester.createGesture(
       kind: PointerDeviceKind.mouse,
     );
     await gesture.addPointer();
     await gesture.moveTo(tester.getCenter(find.text('16')));
     await tester.pumpAndSettle();
-    expect(inkController, paints..circle(color: datePickerTheme.dayOverlayColor?.resolve(<MaterialState>{})));
+    expect(inkFeatures, paints..circle(color: datePickerTheme.dayOverlayColor?.resolve(<MaterialState>{})));
 
     // Test the range selection overlay color.
     await gesture.moveTo(tester.getCenter(find.text('18')));
     await tester.pumpAndSettle();
-    expect(inkController, paints..circle(color: datePickerTheme.rangeSelectionOverlayColor?.resolve(<MaterialState>{})));
+    expect(inkFeatures, paints..circle(color: datePickerTheme.rangeSelectionOverlayColor?.resolve(<MaterialState>{})));
   });
 
   testWidgets('Dividers use DatePickerThemeData.dividerColor', (WidgetTester tester) async {
@@ -777,7 +777,7 @@ void main() {
     );
 
     // Test the hover overlay color.
-    final InkController inkController = tester.inkController;
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
     final TestGesture gesture = await tester.createGesture(
       kind: PointerDeviceKind.mouse,
     );
@@ -785,7 +785,7 @@ void main() {
     await gesture.moveTo(tester.getCenter(find.text('20')));
     await tester.pumpAndSettle();
     expect(
-      inkController,
+      inkFeatures,
       paints
         ..circle(color: dayOverlayColor.resolve(<MaterialState>{MaterialState.hovered})),
     );
@@ -796,7 +796,7 @@ void main() {
     if (kIsWeb) {
       // An extra circle is painted on the web for the hovered state.
       expect(
-        inkController,
+        inkFeatures,
         paints
           ..circle(color: dayOverlayColor.resolve(<MaterialState>{MaterialState.hovered}))
           ..circle(color: dayOverlayColor.resolve(<MaterialState>{MaterialState.hovered}))
@@ -804,7 +804,7 @@ void main() {
       );
     } else {
       expect(
-        inkController,
+        inkFeatures,
         paints
           ..circle(color: dayOverlayColor.resolve(<MaterialState>{MaterialState.hovered}))
           ..circle(color: dayOverlayColor.resolve(<MaterialState>{MaterialState.pressed})),
@@ -822,7 +822,7 @@ void main() {
 
     // Test the focused overlay color.
     expect(
-      inkController,
+      inkFeatures,
       paints
         ..circle(color: dayOverlayColor.resolve(<MaterialState>{MaterialState.focused})),
     );
@@ -870,7 +870,7 @@ void main() {
     );
 
     // Test the hover overlay color.
-    final InkController inkController = tester.inkController;
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
     final TestGesture gesture = await tester.createGesture(
       kind: PointerDeviceKind.mouse,
     );
@@ -878,7 +878,7 @@ void main() {
     await gesture.moveTo(tester.getCenter(find.text('2022')));
     await tester.pumpAndSettle();
     expect(
-      inkController,
+      inkFeatures,
       paints
         ..rect(color: yearOverlayColor.resolve(<MaterialState>{MaterialState.hovered})),
     );
@@ -887,7 +887,7 @@ void main() {
     await gesture.down(tester.getCenter(find.text('2022')));
     await tester.pumpAndSettle();
     expect(
-      inkController,
+      inkFeatures,
       paints
         ..rect(color: yearOverlayColor.resolve(<MaterialState>{MaterialState.hovered}))
         ..rect(color: yearOverlayColor.resolve(<MaterialState>{MaterialState.pressed})),
@@ -904,7 +904,7 @@ void main() {
 
     // Test the focused overlay color.
     expect(
-      inkController,
+      inkFeatures,
       paints
         ..rect(color: yearOverlayColor.resolve(<MaterialState>{MaterialState.focused})),
     );
@@ -949,7 +949,7 @@ void main() {
     );
 
     // Test the hover overlay color.
-    final InkController inkController = tester.inkController;
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
     final TestGesture gesture = await tester.createGesture(
       kind: PointerDeviceKind.mouse,
     );
@@ -957,7 +957,7 @@ void main() {
     await gesture.moveTo(tester.getCenter(find.text('18')));
     await tester.pumpAndSettle();
     expect(
-      inkController,
+      inkFeatures,
       paints
         ..circle(color: rangeSelectionOverlayColor.resolve(<MaterialState>{MaterialState.hovered})),
     );
@@ -968,7 +968,7 @@ void main() {
     if (kIsWeb) {
       // An extra circle is painted on the web for the hovered state.
       expect(
-        inkController,
+        inkFeatures,
         paints
           ..circle(color: rangeSelectionOverlayColor.resolve(<MaterialState>{MaterialState.hovered}))
           ..circle(color: rangeSelectionOverlayColor.resolve(<MaterialState>{MaterialState.hovered}))
@@ -976,7 +976,7 @@ void main() {
       );
     } else {
       expect(
-        inkController,
+        inkFeatures,
         paints
           ..circle(color: rangeSelectionOverlayColor.resolve(<MaterialState>{MaterialState.hovered}))
           ..circle(color: rangeSelectionOverlayColor.resolve(<MaterialState>{MaterialState.pressed})),

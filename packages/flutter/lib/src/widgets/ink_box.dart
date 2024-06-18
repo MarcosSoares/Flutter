@@ -336,8 +336,8 @@ abstract class InkFeature {
   String toString() => describeIdentity(this);
 }
 
-class _InkRenderBox extends RenderProxyBox implements InkController {
-  _InkRenderBox({
+class _RenderInkFeatures extends RenderProxyBox implements InkController {
+  _RenderInkFeatures({
     RenderBox? child,
     required this.vsync,
     required this.absorbHitTest,
@@ -428,7 +428,7 @@ class _InkFeatures extends SingleChildRenderObjectWidget {
 
   @override
   InkController createRenderObject(BuildContext context) {
-    return _InkRenderBox(
+    return _RenderInkFeatures(
       color: color,
       absorbHitTest: absorbHitTest,
       vsync: vsync,
@@ -436,7 +436,7 @@ class _InkFeatures extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, _InkRenderBox renderObject) {
+  void updateRenderObject(BuildContext context, _RenderInkFeatures renderObject) {
     renderObject
       ..color = color
       ..absorbHitTest = absorbHitTest;

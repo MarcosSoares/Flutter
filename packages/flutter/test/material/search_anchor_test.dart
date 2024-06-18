@@ -622,16 +622,19 @@ void main() {
       ),
     );
 
+    RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+
     // On hovered.
     final TestGesture gesture = await _pointGestureToSearchBar(tester);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: hoveredColor.withOpacity(1.0)));
+    expect(inkFeatures, paints..rect(color: hoveredColor.withOpacity(1.0)));
 
     // On pressed.
     await tester.pumpAndSettle();
     await gesture.down(tester.getCenter(find.byType(SearchBar)));
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect()..rect(color: pressedColor.withOpacity(1.0)));
+    inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect()..rect(color: pressedColor.withOpacity(1.0)));
 
     // On focused.
     await tester.pumpAndSettle();
@@ -640,7 +643,8 @@ void main() {
     // Remove the pointer so we are no longer hovering.
     await gesture.removePointer();
     await tester.pump();
-    expect(tester.inkController, paints..rect()..rect(color: focusedColor.withOpacity(1.0)));
+    inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect()..rect(color: focusedColor.withOpacity(1.0)));
   });
 
   testWidgets('SearchBar respects side and shape properties', (WidgetTester tester) async {

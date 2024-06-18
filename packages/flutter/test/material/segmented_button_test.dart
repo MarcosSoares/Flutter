@@ -22,6 +22,10 @@ Widget boilerplate({required Widget child}) {
 }
 
 void main() {
+  RenderObject getOverlayColor(WidgetTester tester) {
+    return tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+  }
+
   testWidgets('SegmentsButton when compositing does not crash', (WidgetTester tester) async {
     // Regression test for https://github.com/flutter/flutter/issues/135747
     // If the render object holds on to a stale canvas reference, this will
@@ -602,13 +606,13 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: theme.colorScheme.onSurface.withOpacity(0.08)));
+    expect(getOverlayColor(tester), paints..rect(color: theme.colorScheme.onSurface.withOpacity(0.08)));
     expect(material.textStyle?.color, theme.colorScheme.onSurface);
 
     // Highlighted (pressed).
     await gesture.down(center);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect()..rect(color: theme.colorScheme.onSurface.withOpacity(0.1)));
+    expect(getOverlayColor(tester), paints..rect()..rect(color: theme.colorScheme.onSurface.withOpacity(0.1)));
     expect(material.textStyle?.color, theme.colorScheme.onSurface);
   });
 
@@ -770,7 +774,7 @@ void main() {
     await gesture.addPointer();
     await gesture.down(tester.getCenter(find.text('1')));
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: foregroundColor.withOpacity(0.08)));
+    expect(getOverlayColor(tester), paints..rect(color: foregroundColor.withOpacity(0.08)));
   });
 
   testWidgets('Disabled SegmentedButton has correct states when rebuilding', (WidgetTester tester) async {
@@ -942,20 +946,20 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.08)));
+    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.08)));
 
     // Hovered unselected segment,
     center = tester.getCenter(find.text('Option 2'));
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.08)));
+    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.08)));
 
     // Highlighted unselected segment (pressed).
     center = tester.getCenter(find.text('Option 1'));
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(
-      tester.inkController,
+      getOverlayColor(tester),
       paints
         ..rect(color: overlayColor.withOpacity(0.08))
         ..rect(color: overlayColor.withOpacity(0.1)),
@@ -971,7 +975,7 @@ void main() {
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(
-      tester.inkController,
+      getOverlayColor(tester),
       paints
         ..rect(color: overlayColor.withOpacity(0.08))
         ..rect(color: overlayColor.withOpacity(0.1)),
@@ -985,12 +989,12 @@ void main() {
     // Focused unselected segment.
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.1)));
+    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.1)));
 
     // Focused selected segment.
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: overlayColor.withOpacity(0.1)));
+    expect(getOverlayColor(tester), paints..rect(color: overlayColor.withOpacity(0.1)));
   });
 
   testWidgets('SegmentedButton.styleFrom with transparent overlayColor', (WidgetTester tester) async {
@@ -1023,13 +1027,13 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(center);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: overlayColor));
+    expect(getOverlayColor(tester), paints..rect(color: overlayColor));
 
     // Highlighted (pressed).
     await gesture.down(center);
     await tester.pumpAndSettle();
     expect(
-      tester.inkController,
+      getOverlayColor(tester),
       paints
         ..rect(color: overlayColor)
         ..rect(color: overlayColor),
@@ -1043,7 +1047,7 @@ void main() {
     // Focused.
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(color: overlayColor));
+    expect(getOverlayColor(tester), paints..rect(color: overlayColor));
   });
 
   // This is a regression test for https://github.com/flutter/flutter/issues/144990.

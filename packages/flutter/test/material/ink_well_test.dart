@@ -170,7 +170,8 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(tester.getCenter(find.byType(SizedBox)));
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
   });
 
   testWidgets('ink well works with InkBox', (WidgetTester tester) async {
@@ -198,7 +199,8 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(tester.getCenter(find.byType(SizedBox)));
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
   });
 
   testWidgets('ink well changes color on hover with overlayColor', (WidgetTester tester) async {
@@ -236,7 +238,8 @@ void main() {
     await gesture.addPointer();
     await gesture.moveTo(tester.getCenter(find.byType(SizedBox)));
     await tester.pumpAndSettle();
-    expect(tester.inkController, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
   });
 
   testWidgets('ink response changes color on focus', (WidgetTester tester) async {
@@ -266,12 +269,12 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRect, 0));
     focusNode.requestFocus();
     await tester.pumpAndSettle();
     expect(
-      inkController,
+      inkFeatures,
       paints ..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff0000ff)),
     );
     focusNode.dispose();
@@ -315,12 +318,12 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRect, 0));
     focusNode.requestFocus();
     await tester.pumpAndSettle();
     expect(
-      inkController,
+      inkFeatures,
       paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff0000ff)),
     );
     focusNode.dispose();
@@ -353,10 +356,10 @@ void main() {
     ));
     await tester.pumpAndSettle();
     final TestGesture gesture = await tester.startGesture(tester.getRect(find.byType(InkWell)).center);
-    final InkController inkController = tester.inkController;
-    expect(inkController, paints..rect(rect: const Rect.fromLTRB(0, 0, 100, 100), color: pressedColor.withAlpha(0)));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..rect(rect: const Rect.fromLTRB(0, 0, 100, 100), color: pressedColor.withAlpha(0)));
     await tester.pumpAndSettle(); // Let the press highlight animation finish.
-    expect(inkController, paints..rect(rect: const Rect.fromLTRB(0, 0, 100, 100), color: pressedColor));
+    expect(inkFeatures, paints..rect(rect: const Rect.fromLTRB(0, 0, 100, 100), color: pressedColor));
     await gesture.up();
   });
 
@@ -393,7 +396,8 @@ void main() {
     await tester.pumpAndSettle();
     final TestGesture gesture = await tester.startGesture(tester.getRect(find.byType(InkWell)).center);
     await tester.pump(const Duration(milliseconds: 200)); // unconfirmed splash is well underway
-    expect(tester.inkController, paints..circle(x: 50, y: 50, color: splashColor));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..circle(x: 50, y: 50, color: splashColor));
     await gesture.up();
     focusNode.dispose();
   });
@@ -442,7 +446,8 @@ void main() {
     await tester.pumpAndSettle();
     final TestGesture gesture = await tester.startGesture(tester.getRect(find.byType(InkWell)).center);
     await tester.pump(const Duration(milliseconds: 200)); // unconfirmed splash is well underway
-    expect(tester.inkController, paints..circle(x: 50, y: 50, color: splashColor));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paints..circle(x: 50, y: 50, color: splashColor));
     await gesture.up();
     focusNode.dispose();
   });
@@ -470,11 +475,11 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawCircle, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 0));
     focusNode.requestFocus();
     await tester.pumpAndSettle();
-    expect(inkController, paints..circle(radius: 20, color: const Color(0xff0000ff)));
+    expect(inkFeatures, paints..circle(radius: 20, color: const Color(0xff0000ff)));
     focusNode.dispose();
   });
 
@@ -501,14 +506,14 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 0));
 
     focusNode.requestFocus();
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 1));
 
-    expect(inkController, paints..rrect(
+    expect(inkFeatures, paints..rrect(
       rrect: RRect.fromLTRBR(350.0, 250.0, 450.0, 350.0, const Radius.circular(10)),
       color: const Color(0xff0000ff),
     ));
@@ -537,16 +542,16 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 0));
 
     // Hover the ink well.
     final TestGesture gesture = await tester.createGesture(kind: PointerDeviceKind.mouse, pointer: 1);
     await gesture.addPointer(location: tester.getRect(find.byType(InkWell)).center);
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 1));
 
-    expect(inkController, paints..rrect(
+    expect(inkFeatures, paints..rrect(
       rrect: RRect.fromLTRBR(350.0, 250.0, 450.0, 350.0, const Radius.circular(10)),
       color: const Color(0xff00ff00),
     ));
@@ -579,14 +584,14 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#clipPath, 0));
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 0));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 0));
 
     focusNode.requestFocus();
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#clipPath, 1));
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 1));
 
     // Create a rounded rectangle path with a radius that makes it similar to the custom border circle.
     const Rect expectedClipRect = Rect.fromLTRB(0, 0, 100, 100);
@@ -597,7 +602,7 @@ void main() {
       ));
     // The ink well custom border path should match the rounded rectangle path.
     expect(
-      inkController,
+      inkFeatures,
       paints..clipPath(pathMatcher: coversSameAreaAs(
         expectedClipPath,
         areaToCompare: expectedClipRect.inflate(20.0),
@@ -631,16 +636,16 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#clipPath, 0));
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 0));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 0));
 
     // Hover the ink well.
     final TestGesture gesture = await tester.createGesture(kind: PointerDeviceKind.mouse, pointer: 1);
     await gesture.addPointer(location: tester.getRect(find.byType(InkWell)).center);
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#clipPath, 1));
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 1));
 
     // Create a rounded rectangle path with a radius that makes it similar to the custom border circle.
     const Rect expectedClipRect = Rect.fromLTRB(0, 0, 100, 100);
@@ -651,7 +656,7 @@ void main() {
       ));
     // The ink well custom border path should match the rounded rectangle path.
     expect(
-      inkController,
+      inkFeatures,
       paints..clipPath(pathMatcher: coversSameAreaAs(
         expectedClipPath,
         areaToCompare: expectedClipRect.inflate(20.0),
@@ -684,18 +689,18 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
     }
     await tester.pumpWidget(boilerplate(10));
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawCircle, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 0));
 
     focusNode.requestFocus();
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawCircle, 1));
-    expect(inkController, paints..circle(radius: 10, color: const Color(0xff0000ff)));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 1));
+    expect(inkFeatures, paints..circle(radius: 10, color: const Color(0xff0000ff)));
 
     await tester.pumpWidget(boilerplate(20));
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawCircle, 1));
-    expect(inkController, paints..circle(radius: 20, color: const Color(0xff0000ff)));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 1));
+    expect(inkFeatures, paints..circle(radius: 20, color: const Color(0xff0000ff)));
     focusNode.dispose();
   });
 
@@ -725,19 +730,19 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
 
     await tester.pumpWidget(boilerplate(BoxShape.circle));
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawCircle, 0));
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 0));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 0));
 
     focusNode.requestFocus();
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawCircle, 1));
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 0));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 0));
 
     await tester.pumpWidget(boilerplate(BoxShape.rectangle));
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawCircle, 0));
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 0));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 1));
     focusNode.dispose();
   });
 
@@ -766,21 +771,21 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
 
     await tester.pumpWidget(boilerplate(BorderRadius.circular(10)));
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 0));
 
     focusNode.requestFocus();
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 1));
-    expect(inkController, paints..rrect(
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 1));
+    expect(inkFeatures, paints..rrect(
       rrect: RRect.fromLTRBR(350.0, 250.0, 450.0, 350.0, const Radius.circular(10)),
       color: const Color(0xff0000ff),
     ));
 
     await tester.pumpWidget(boilerplate(BorderRadius.circular(30)));
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawRRect, 1));
-    expect(inkController, paints..rrect(
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRRect, 1));
+    expect(inkFeatures, paints..rrect(
       rrect: RRect.fromLTRBR(350.0, 250.0, 450.0, 350.0, const Radius.circular(30)),
       color: const Color(0xff0000ff),
     ));
@@ -815,12 +820,12 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
 
     await tester.pumpWidget(boilerplate(BorderRadius.circular(20)));
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#clipPath, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 0));
 
     focusNode.requestFocus();
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#clipPath, 1));
+    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 1));
 
     const Rect expectedClipRect = Rect.fromLTRB(0, 0, 100, 100);
     Path expectedClipPath = Path()
@@ -829,7 +834,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
           const Radius.circular(20),
       ));
     expect(
-      inkController,
+      inkFeatures,
       paints..clipPath(pathMatcher: coversSameAreaAs(
         expectedClipPath,
         areaToCompare: expectedClipRect.inflate(20.0),
@@ -845,7 +850,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
           const Radius.circular(40),
       ));
     expect(
-      inkController,
+      inkFeatures,
       paints..clipPath(pathMatcher: coversSameAreaAs(
         expectedClipPath,
         areaToCompare: expectedClipRect.inflate(20.0),
@@ -886,12 +891,12 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
     await tester.pumpWidget(boilerplate(BorderRadius.circular(20)));
     await tester.pumpAndSettle();
 
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#clipPath, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 0));
 
     final TestGesture gesture = await tester.startGesture(tester.getRect(find.byType(InkWell)).center);
     await tester.pump(const Duration(milliseconds: 200)); // Unconfirmed splash is well underway.
-    expect(inkController, paintsExactlyCountTimes(#clipPath, 2)); // Splash and highlight.
+    expect(inkFeatures, paintsExactlyCountTimes(#clipPath, 2)); // Splash and highlight.
 
     const Rect expectedClipRect = Rect.fromLTRB(0, 0, 100, 100);
     Path expectedClipPath = Path()
@@ -902,7 +907,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
 
     // Check that the splash and the highlight are correctly clipped.
     expect(
-      inkController,
+      inkFeatures,
       paints
         ..clipPath(pathMatcher: coversSameAreaAs(
           expectedClipPath,
@@ -926,7 +931,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
 
     // Check that the splash and the highlight are correctly clipped.
     expect(
-      inkController,
+      inkFeatures,
       paints
         ..clipPath(pathMatcher: coversSameAreaAs(
           expectedClipPath,
@@ -969,11 +974,11 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
       ),
     ));
     await tester.pumpAndSettle();
-    final InkController inkController = tester.inkController;
-    expect(inkController, paintsExactlyCountTimes(#drawRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRect, 0));
     focusNode.requestFocus();
     await tester.pumpAndSettle();
-    expect(inkController, paintsExactlyCountTimes(#drawRect, 0));
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRect, 0));
     focusNode.dispose();
   });
 
@@ -2072,7 +2077,8 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
     expect(log, equals(<String>['tap-down', 'double-tap']));
 
     await tester.pumpAndSettle();
-    expect(tester.inkController, paintsExactlyCountTimes(#drawRect, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawRect, 0));
   });
 
   testWidgets('InkWell splash should not survive after [onTapDown, onTapDown, onTapCancel, onDoubleTap] sequence', (WidgetTester tester) async {
@@ -2116,7 +2122,8 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
     expect(log, equals(<String>['tap-down', 'tap-down', 'tap-cancel', 'double-tap']));
 
     await tester.pumpAndSettle();
-    expect(tester.inkController, paintsExactlyCountTimes(#drawCircle, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 0));
   });
 
   testWidgets('InkWell disposes statesController', (WidgetTester tester) async {
@@ -2193,12 +2200,12 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
     await tester.pumpAndSettle();
     await gesture.moveTo(const Offset(10, 10)); // fade out the overlay
     await tester.pump(); // trigger the fade out animation
-    final InkController inkController = tester.inkController;
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
     // Fadeout begins with the MaterialStates.hovered overlay color
-    expect(inkController, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
+    expect(inkFeatures, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
     // 50ms fadeout is 50% complete, overlay color alpha goes from 0xff to 0x80
     await tester.pump(const Duration(milliseconds: 25));
-    expect(inkController, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0x8000ff00)));
+    expect(inkFeatures, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0x8000ff00)));
   });
 
   testWidgets('InkWell secondary tap test', (WidgetTester tester) async {
@@ -2258,7 +2265,8 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
     await tester.pump(const Duration(milliseconds: 200));
 
     // No splash should be painted.
-    expect(tester.inkController, paintsExactlyCountTimes(#drawCircle, 0));
+    final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
+    expect(inkFeatures, paintsExactlyCountTimes(#drawCircle, 0));
 
     await gesture.up();
   });

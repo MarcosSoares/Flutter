@@ -1359,8 +1359,9 @@ void main() {
       await tester.pump(); // Start the splash animation.
       await tester.pump(const Duration(milliseconds: 100)); // Splash is underway.
 
+      final RenderObject inkFeatures = tester.allRenderObjects.firstWhere((RenderObject object) => object.runtimeType.toString() == '_RenderInkFeatures');
       // Check if the ink splash is drawn on top of the background color.
-      expect(tester.inkController, paints..path(color: collapsedBackgroundColor)..circle(color: theme.splashColor));
+      expect(inkFeatures, paints..path(color: collapsedBackgroundColor)..circle(color: theme.splashColor));
 
       // Finish gesture to release resources.
       await gesture.up();
