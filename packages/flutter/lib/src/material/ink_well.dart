@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'debug.dart';
 import 'ink_highlight.dart';
 import 'material.dart';
+import 'material_state.dart';
 import 'theme.dart';
 
 // Examples can assume:
@@ -227,14 +228,14 @@ class InkResponse extends StatelessWidget {
   /// The cursor for a mouse pointer when it enters or is hovering over the
   /// widget.
   ///
-  /// If [mouseCursor] is a [WidgetStateProperty<MouseCursor>],
-  /// [WidgetStateProperty.resolve] is used for the following [WidgetState]s:
+  /// If [mouseCursor] is a [MaterialStateProperty<MouseCursor>],
+  /// [MaterialStateProperty.resolve] is used for the following [MaterialState]s:
   ///
-  ///  * [WidgetState.hovered].
-  ///  * [WidgetState.focused].
-  ///  * [WidgetState.disabled].
+  ///  * [MaterialState.hovered].
+  ///  * [MaterialState.focused].
+  ///  * [MaterialState.disabled].
   ///
-  /// If this property is null, [WidgetStateMouseCursor.clickable] will be used.
+  /// If this property is null, [MaterialStateMouseCursor.clickable] will be used.
   final MouseCursor? mouseCursor;
 
   /// Whether this ink response should be clipped its bounds.
@@ -343,12 +344,12 @@ class InkResponse extends StatelessWidget {
   /// This default null property can be used as an alternative to
   /// [focusColor], [hoverColor], [highlightColor], and
   /// [splashColor]. If non-null, it is resolved against one of
-  /// [WidgetState.focused], [WidgetState.hovered], and
-  /// [WidgetState.pressed]. It's convenient to use when the parent
-  /// widget can pass along its own WidgetStateProperty value for
+  /// [MaterialState.focused], [MaterialState.hovered], and
+  /// [MaterialState.pressed]. It's convenient to use when the parent
+  /// widget can pass along its own MaterialStateProperty value for
   /// the overlay color.
   ///
-  /// [WidgetState.pressed] triggers a ripple (an ink splash), per
+  /// [MaterialState.pressed] triggers a ripple (an ink splash), per
   /// the current Material Design spec. The [overlayColor] doesn't map
   /// a state to [highlightColor] because a separate highlight is not
   /// used by the current design guidelines. See
@@ -362,7 +363,7 @@ class InkResponse extends StatelessWidget {
   ///  * The Material Design specification for overlay colors and how they
   ///    match a component's state:
   ///    <https://material.io/design/interaction/states.html#anatomy>.
-  final WidgetStateProperty<Color?>? overlayColor;
+  final MaterialStateProperty<Color?>? overlayColor;
 
   /// The splash color of the ink response. If this property is null then the
   /// splash color of the theme, [ThemeData.splashColor], will be used.
@@ -439,16 +440,16 @@ class InkResponse extends StatelessWidget {
 
   /// {@template flutter.material.inkwell.statesController}
   /// Represents the interactive "state" of this widget in terms of
-  /// a set of [WidgetState]s, like [WidgetState.pressed] and
-  /// [WidgetState.focused].
+  /// a set of [MaterialState]s, like [MaterialState.pressed] and
+  /// [MaterialState.focused].
   ///
   /// Classes based on this one can provide their own
-  /// [WidgetStatesController] to which they've added listeners.
-  /// They can also update the controller's [WidgetStatesController.value]
+  /// [MaterialStatesController] to which they've added listeners.
+  /// They can also update the controller's [MaterialStatesController.value]
   /// however, this may only be done when it's safe to call
   /// [State.setState], like in an event handler.
   /// {@endtemplate}
-  final WidgetStatesController? statesController;
+  final MaterialStatesController? statesController;
 
   /// The duration of the animation that animates the hover effect.
   ///
@@ -575,7 +576,7 @@ class _InkResponseStateWidget extends StatefulWidget {
   final Color? focusColor;
   final Color? hoverColor;
   final Color? highlightColor;
-  final WidgetStateProperty<Color?>? overlayColor;
+  final MaterialStateProperty<Color?>? overlayColor;
   final Color? splashColor;
   final InteractiveInkFeatureFactory? splashFactory;
   final bool enableFeedback;
@@ -587,7 +588,7 @@ class _InkResponseStateWidget extends StatefulWidget {
   final _ParentInkResponseState? parentState;
   final _GetRectCallback? getRectCallback;
   final _CheckContext debugCheckContext;
-  final WidgetStatesController? statesController;
+  final MaterialStatesController? statesController;
   final Duration? hoverDuration;
 
   @override
@@ -640,7 +641,7 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     ActivateIntent: CallbackAction<ActivateIntent>(onInvoke: activateOnIntent),
     ButtonActivateIntent: CallbackAction<ButtonActivateIntent>(onInvoke: activateOnIntent),
   };
-  WidgetStatesController? internalStatesController;
+  MaterialStatesController? internalStatesController;
 
   bool get highlightsExist => _highlights.values.where((InkHighlight? highlight) => highlight != null).isNotEmpty;
 
@@ -677,7 +678,7 @@ class _InkResponseState extends State<_InkResponseStateWidget>
       widget.onTap?.call();
     }
     // Delay the call to `updateHighlight` to simulate a pressed delay
-    // and give WidgetStatesController listeners a chance to react.
+    // and give MaterialStatesController listeners a chance to react.
     _activationTimer = Timer(_activationDuration, () {
       updateHighlight(_HighlightType.pressed, value: false);
     });
@@ -698,13 +699,13 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     setState(() { });
   }
 
-  WidgetStatesController get statesController => widget.statesController ?? internalStatesController!;
+  MaterialStatesController get statesController => widget.statesController ?? internalStatesController!;
 
   void initStatesController() {
     if (widget.statesController == null) {
-      internalStatesController = WidgetStatesController();
+      internalStatesController = MaterialStatesController();
     }
-    statesController.update(WidgetState.disabled, !enabled);
+    statesController.update(MaterialState.disabled, !enabled);
     statesController.addListener(handleStatesControllerChange);
   }
 
@@ -744,9 +745,9 @@ class _InkResponseState extends State<_InkResponseStateWidget>
       _updateHighlightsAndSplashes();
     }
     if (enabled != isWidgetEnabled(oldWidget)) {
-      statesController.update(WidgetState.disabled, !enabled);
+      statesController.update(MaterialState.disabled, !enabled);
       if (!enabled) {
-        statesController.update(WidgetState.pressed, false);
+        statesController.update(MaterialState.pressed, false);
         // Remove the existing hover highlight immediately when enabled is false.
         // Do not rely on updateHighlight or InkHighlight.deactivate to not break
         // the expected lifecycle which is updating _hovering when the mouse exit.
@@ -795,10 +796,10 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 
     switch (type) {
       case _HighlightType.pressed:
-        statesController.update(WidgetState.pressed, value);
+        statesController.update(MaterialState.pressed, value);
       case _HighlightType.hover:
         if (callOnHover) {
-          statesController.update(WidgetState.hovered, value);
+          statesController.update(MaterialState.hovered, value);
         }
       case _HighlightType.focus:
         // see handleFocusUpdate()
@@ -938,10 +939,10 @@ class _InkResponseState extends State<_InkResponseStateWidget>
   void handleFocusUpdate(bool hasFocus) {
     _hasFocus = hasFocus;
     // Set here rather than updateHighlight because this widget's
-    // (WidgetState) states include WidgetState.focused if
+    // (MaterialState) states include MaterialState.focused if
     // the InkWell _has_ the focus, rather than if it's showing
     // the focus per FocusManager.instance.highlightMode.
-    statesController.update(WidgetState.focused, hasFocus);
+    statesController.update(MaterialState.focused, hasFocus);
     updateFocusHighlights();
     widget.onFocusChange?.call(hasFocus);
   }
@@ -982,7 +983,7 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     } else {
       globalPosition = details!.globalPosition;
     }
-    statesController.update(WidgetState.pressed, true); // ... before creating the splash
+    statesController.update(MaterialState.pressed, true); // ... before creating the splash
     final InteractiveInkFeature splash = _createSplash(globalPosition);
     _splashes ??= HashSet<InteractiveInkFeature>();
     _splashes!.add(splash);
@@ -1115,9 +1116,9 @@ class _InkResponseState extends State<_InkResponseStateWidget>
     super.build(context); // See AutomaticKeepAliveClientMixin.
 
     Color getHighlightColorForType(_HighlightType type) {
-      const Set<WidgetState> pressed = <WidgetState>{WidgetState.pressed};
-      const Set<WidgetState> focused = <WidgetState>{WidgetState.focused};
-      const Set<WidgetState> hovered = <WidgetState>{WidgetState.hovered};
+      const Set<MaterialState> pressed = <MaterialState>{MaterialState.pressed};
+      const Set<MaterialState> focused = <MaterialState>{MaterialState.focused};
+      const Set<MaterialState> hovered = <MaterialState>{MaterialState.hovered};
 
       final ThemeData theme = Theme.of(context);
       return switch (type) {
@@ -1135,8 +1136,8 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 
     _currentSplash?.color = widget.overlayColor?.resolve(statesController.value) ?? widget.splashColor ?? Theme.of(context).splashColor;
 
-    final MouseCursor effectiveMouseCursor = WidgetStateProperty.resolveAs<MouseCursor>(
-      widget.mouseCursor ?? WidgetStateMouseCursor.clickable,
+    final MouseCursor effectiveMouseCursor = MaterialStateProperty.resolveAs<MouseCursor>(
+      widget.mouseCursor ?? MaterialStateMouseCursor.clickable,
       statesController.value,
     );
 
