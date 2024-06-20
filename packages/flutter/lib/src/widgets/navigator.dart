@@ -161,6 +161,11 @@ abstract class Route<T> extends _RoutePlaceholder {
     }
   }
 
+  /// When the route state is updated, request focus if the current route is at the top.
+  ///
+  /// Defaults to true.
+  bool get requestFocus => true;
+
   /// The navigator that the route is in, if any.
   NavigatorState? get navigator => _navigator;
   NavigatorState? _navigator;
@@ -245,7 +250,7 @@ abstract class Route<T> extends _RoutePlaceholder {
   @mustCallSuper
   TickerFuture didPush() {
     return TickerFuture.complete()..then<void>((void _) {
-      if (navigator?.widget.requestFocus ?? false) {
+      if ((navigator?.widget.requestFocus ?? false) && requestFocus) {
         navigator!.focusNode.enclosingScope?.requestFocus();
       }
     });
@@ -261,7 +266,7 @@ abstract class Route<T> extends _RoutePlaceholder {
   @protected
   @mustCallSuper
   void didAdd() {
-    if (navigator?.widget.requestFocus ?? false) {
+    if ((navigator?.widget.requestFocus ?? false) && requestFocus) {
       // This TickerFuture serves two purposes. First, we want to make sure that
       // animations triggered by other operations will finish before focusing
       // the navigator. Second, navigator.focusNode might acquire more focused

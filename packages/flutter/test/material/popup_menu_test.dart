@@ -4165,6 +4165,38 @@ void main() {
     ));
     expect(iconText.text.style?.color, Colors.red);
   });
+
+  testWidgets('The menu should not steal focus from the TextField when it appears.', (WidgetTester tester) async {
+    final FocusNode focusNode = FocusNode();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: <Widget>[
+              TextField(focusNode: focusNode, autofocus: true),
+              PopupMenuButton<int>(
+                style: const ButtonStyle(
+                  iconColor: MaterialStatePropertyAll<Color>(Colors.red),
+                ),
+                itemBuilder: (BuildContext context) {
+                  return <PopupMenuItem<int>>[
+                    const PopupMenuItem<int>(
+                      value: 1,
+                      child: Text('One'),
+                    ),
+                  ];
+                },
+                child: const Text('click here'),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('click here'));
+    await tester.pump();
+    expect(focusNode.hasFocus, isTrue);
+  });
 }
 
 Matcher overlaps(Rect other) => OverlapsMatcher(other);

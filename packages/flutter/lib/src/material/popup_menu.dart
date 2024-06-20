@@ -859,6 +859,7 @@ class _PopupMenuRoute<T> extends PopupRoute<T> {
     required this.clipBehavior,
     super.settings,
     this.popUpAnimationStyle,
+    this.requestFocus = false,
   }) : itemSizes = List<Size?>.filled(items.length, null),
        // Menus always cycle focus through their items irrespective of the
        // focus traversal edge behavior set in the Navigator.
@@ -879,6 +880,8 @@ class _PopupMenuRoute<T> extends PopupRoute<T> {
   final BoxConstraints? constraints;
   final Clip clipBehavior;
   final AnimationStyle? popUpAnimationStyle;
+  @override
+  final bool requestFocus;
 
   CurvedAnimation? _animation;
 
