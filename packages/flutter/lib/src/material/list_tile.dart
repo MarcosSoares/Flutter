@@ -10,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
 import 'constants.dart';
+import 'debug.dart';
 import 'divider.dart';
 import 'icon_button.dart';
 import 'icon_button_theme.dart';
@@ -768,7 +769,7 @@ class ListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasInkController(context));
+    assert(debugCheckHasMaterial(context));
     final ThemeData theme = Theme.of(context);
     final ListTileThemeData tileTheme = ListTileTheme.of(context);
     final ListTileStyle listTileStyle = style

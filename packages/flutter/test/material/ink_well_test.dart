@@ -1397,7 +1397,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
         ),
       ),
     );
-    final InkController material = Material.of(tester.element(find.byKey(innerKey)));
+    final MaterialInkController material = Material.of(tester.element(find.byKey(innerKey)));
 
     // Press
     final TestGesture gesture = await tester.startGesture(tester.getCenter(find.byKey(innerKey)), pointer: 1);
@@ -1473,7 +1473,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
         ),
       ),
     );
-    final InkController material = Material.of(tester.element(find.byKey(innerKey)));
+    final MaterialInkController material = Material.of(tester.element(find.byKey(innerKey)));
 
     // Press
     final TestGesture gesture1 = await tester.startGesture(tester.getCenter(find.byKey(innerKey)), pointer: 1);
@@ -1565,7 +1565,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
         ),
       ),
     );
-    final InkController material = Material.of(tester.element(find.byKey(innerKey)));
+    final MaterialInkController material = Material.of(tester.element(find.byKey(innerKey)));
 
     // Press middle
     final TestGesture gesture1 = await tester.startGesture(tester.getTopLeft(find.byKey(middleKey)) + const Offset(1, 1), pointer: 1);
@@ -1633,7 +1633,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
         ),
       ),
     );
-    final InkController material = Material.of(tester.element(find.byKey(leftKey)));
+    final MaterialInkController material = Material.of(tester.element(find.byKey(leftKey)));
 
     final Offset parentPosition = tester.getTopLeft(find.byKey(parentKey)) + const Offset(1, 1);
 
@@ -1748,7 +1748,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
         ),
       ),
     );
-    final InkController material = Material.of(tester.element(find.byKey(innerKey)));
+    final MaterialInkController material = Material.of(tester.element(find.byKey(innerKey)));
 
     // Press inner
     final TestGesture gesture = await tester.startGesture(const Offset(100, 50), pointer: 1);
@@ -1825,7 +1825,7 @@ testWidgets('InkResponse radius can be updated', (WidgetTester tester) async {
         ),
       ),
     );
-    final InkController material = Material.of(tester.element(find.byKey(innerKey)));
+    final MaterialInkController material = Material.of(tester.element(find.byKey(innerKey)));
 
     // Press
     final TestGesture gesture = await tester.startGesture(tester.getCenter(find.byKey(innerKey)), pointer: 1);

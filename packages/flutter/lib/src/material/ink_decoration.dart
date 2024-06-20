@@ -5,6 +5,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
+import 'debug.dart';
 import 'material.dart';
 
 /// A convenience widget for drawing images and other decorations on [Material]
@@ -291,7 +292,7 @@ class _InkState extends State<Ink> {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasInkController(context));
+    assert(debugCheckHasMaterial(context));
     Widget result = Padding(
       key: _boxKey,
       padding: widget._paddingIncludingDecoration,

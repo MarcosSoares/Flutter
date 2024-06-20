@@ -134,7 +134,7 @@ class AboutListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasInkController(context));
+    assert(debugCheckHasMaterial(context));
     assert(debugCheckHasMaterialLocalizations(context));
     return ListTile(
       leading: icon,

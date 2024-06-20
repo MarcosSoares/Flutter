@@ -4,6 +4,7 @@
 
 import 'package:flutter/widgets.dart';
 
+import 'debug.dart';
 import 'divider.dart';
 import 'theme.dart';
 
@@ -72,7 +73,7 @@ class DrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasInkController(context));
+    assert(debugCheckHasMaterial(context));
     assert(debugCheckHasMediaQuery(context));
     final ThemeData theme = Theme.of(context);
     final double statusBarHeight = MediaQuery.paddingOf(context).top;

@@ -733,7 +733,7 @@ void main() {
       return find.byWidgetPredicate((Widget widget) => widget is Switch);
     }
 
-    InkController? getSwitchMaterial(WidgetTester tester) {
+    MaterialInkController? getSwitchMaterial(WidgetTester tester) {
       return Material.of(tester.element(findSwitch()));
     }
     await tester.pumpWidget(MaterialApp(
@@ -782,7 +782,7 @@ void main() {
       return find.byWidgetPredicate((Widget widget) => widget is Switch);
     }
 
-    InkController? getSwitchMaterial(WidgetTester tester) {
+    MaterialInkController? getSwitchMaterial(WidgetTester tester) {
       return Material.of(tester.element(findSwitch()));
     }
     await tester.pumpWidget(MaterialApp(

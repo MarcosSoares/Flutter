@@ -49,7 +49,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 200));
 
-    final InkController material = Material.of(tester.element(buttonFinder));
+    final MaterialInkController material = Material.of(tester.element(buttonFinder));
     expect(material, paintsExactlyCountTimes(#drawRect, 1));
 
     expect((material as dynamic).debugInkFeatures, hasLength(1));
@@ -78,7 +78,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 200));
 
-    final InkController material = Material.of(tester.element(buttonFinder));
+    final MaterialInkController material = Material.of(tester.element(buttonFinder));
     expect(material, paintsExactlyCountTimes(#drawPaint, 1));
   },
     skip: kIsWeb, // [intended] shaders are not yet supported for web.

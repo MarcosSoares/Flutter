@@ -750,7 +750,7 @@ class Chip extends StatelessWidget implements ChipAttributes, DeletableChipAttri
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasInkController(context));
+    assert(debugCheckHasMaterial(context));
     return RawChip(
       avatar: avatar,
       label: label,
@@ -1298,7 +1298,7 @@ class _RawChipState extends State<RawChip> with MaterialStateMixin, TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasInkController(context));
+    assert(debugCheckHasMaterial(context));
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasDirectionality(context));
     assert(debugCheckHasMaterialLocalizations(context));
@@ -2323,7 +2323,7 @@ class _UnconstrainedInkSplashFactory extends InteractiveInkFeatureFactory {
 
   @override
   InteractiveInkFeature create({
-    required InkController controller,
+    required MaterialInkController controller,
     required RenderBox referenceBox,
     required Offset position,
     required Color color,

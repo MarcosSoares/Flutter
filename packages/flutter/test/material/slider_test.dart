@@ -1103,7 +1103,7 @@ void main() {
       ),
     );
 
-    final InkController material = Material.of(tester.element(find.byType(Slider)));
+    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
 
     // 5 tick marks and a thumb.
     expect(material, paintsExactlyCountTimes(#drawCircle, 6));
@@ -1159,7 +1159,7 @@ void main() {
     }
 
     Future<void> testReparenting(bool reparent) async {
-      final InkController material = Material.of(tester.element(find.byType(Slider)));
+      final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
       final Offset center = tester.getCenter(find.byType(Slider));
       // Move to 0.0.
       TestGesture gesture = await tester.startGesture(Offset.zero);
@@ -2227,7 +2227,7 @@ void main() {
     await tester.pumpWidget(buildApp());
     await tester.pumpAndSettle();
 
-    final InkController material = Material.of(tester.element(find.byType(Slider)));
+    final MaterialInkController material = Material.of(tester.element(find.byType(Slider)));
     // Check that thumb color is using active color.
     expect(material, paints..circle(color: activeColor));
 
@@ -3313,7 +3313,7 @@ void main() {
     await tester.pumpWidget(sliderAdaptive);
     await tester.pumpAndSettle();
 
-    final InkController material =
+    final MaterialInkController material =
         Material.of(tester.element(find.byType(Slider)));
     expect(material, paints..circle(color: color));
   });
@@ -3336,7 +3336,7 @@ void main() {
     await tester.pumpWidget(sliderAdaptive);
     await tester.pumpAndSettle();
 
-    final InkController material =
+    final MaterialInkController material =
         Material.of(tester.element(find.byType(Slider)));
     expect(material, paints..circle(color: color));
   });
@@ -3356,7 +3356,7 @@ void main() {
     await tester.pumpWidget(sliderAdaptive);
     await tester.pumpAndSettle();
 
-    final InkController material =
+    final MaterialInkController material =
         Material.of(tester.element(find.byType(CupertinoSlider)));
     expect(
       material,
@@ -3388,7 +3388,7 @@ void main() {
     await tester.pumpWidget(sliderAdaptive);
     await tester.pumpAndSettle();
 
-    final InkController material =
+    final MaterialInkController material =
         Material.of(tester.element(find.byType(CupertinoSlider)));
     expect(
       material,

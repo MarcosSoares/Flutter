@@ -1100,7 +1100,7 @@ void main() {
         child: SizedBox(key: sizedBoxKey, width: 20, height: 20),
       ),
     ));
-    final InkController controller = Material.of(sizedBoxKey.currentContext!);
+    final MaterialInkController controller = Material.of(sizedBoxKey.currentContext!);
 
     final TrackPaintInkFeature tracker = TrackPaintInkFeature(
       controller: controller,
@@ -1145,7 +1145,7 @@ void main() {
     );
 
     final Element element = tester.element(find.byType(SizedBox));
-    final InkController controller = Material.of(element);
+    final MaterialInkController controller = Material.of(element);
     final RenderBox referenceBox = element.findRenderObject()! as RenderBox;
 
     await expectLater(
@@ -1162,7 +1162,7 @@ void main() {
 
   group('LookupBoundary', () {
     testWidgets('hides Material from Material.maybeOf', (WidgetTester tester) async {
-      InkController? material;
+      MaterialInkController? material;
 
       await tester.pumpWidget(
         Material(

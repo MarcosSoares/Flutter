@@ -47,7 +47,7 @@ class _InkSplashFactory extends InteractiveInkFeatureFactory {
 
   @override
   InteractiveInkFeature create({
-    required InkController controller,
+    required MaterialInkController controller,
     required RenderBox referenceBox,
     required Offset position,
     required Color color,
@@ -114,7 +114,7 @@ class InkSplash extends InteractiveInkFeature {
   ///
   /// When the splash is removed, `onRemoved` will be called.
   InkSplash({
-    required InkController controller,
+    required MaterialInkController controller,
     required super.referenceBox,
     required TextDirection textDirection,
     Offset? position,

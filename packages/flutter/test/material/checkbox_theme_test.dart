@@ -521,6 +521,6 @@ Future<void> _pointGestureToCheckbox(WidgetTester tester) async {
   await gesture.moveTo(tester.getCenter(find.byType(Checkbox)));
 }
 
-InkController? _getCheckboxMaterial(WidgetTester tester) {
+MaterialInkController? _getCheckboxMaterial(WidgetTester tester) {
   return Material.of(tester.element(find.byType(Checkbox)));
 }

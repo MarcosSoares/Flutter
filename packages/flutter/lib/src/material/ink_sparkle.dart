@@ -458,7 +458,7 @@ class _InkSparkleFactory extends InteractiveInkFeatureFactory {
 
   @override
   InteractiveInkFeature create({
-    required InkController controller,
+    required MaterialInkController controller,
     required RenderBox referenceBox,
     required ui.Offset position,
     required ui.Color color,

@@ -808,7 +808,7 @@ void main() {
 class _InkRippleFactory extends InteractiveInkFeatureFactory {
   @override
   InteractiveInkFeature create({
-    required InkController controller,
+    required MaterialInkController controller,
     required RenderBox referenceBox,
     required Offset position,
     required Color color,

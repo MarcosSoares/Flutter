@@ -42,7 +42,7 @@ class TestInkSplashFactory extends InteractiveInkFeatureFactory {
 
   @override
   InteractiveInkFeature create({
-    required InkController controller,
+    required MaterialInkController controller,
     required RenderBox referenceBox,
     Offset? position,
     required Color color,

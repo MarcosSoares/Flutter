@@ -12,6 +12,7 @@ import 'package:flutter/rendering.dart';
 import 'color_scheme.dart';
 import 'colors.dart';
 import 'constants.dart';
+import 'debug.dart';
 import 'material_state.dart';
 import 'shadows.dart';
 import 'switch_theme.dart';
@@ -848,7 +849,7 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasInkController(context));
+    assert(debugCheckHasMaterial(context));
 
     if (_needsPositionAnimation) {
       _needsPositionAnimation = false;
