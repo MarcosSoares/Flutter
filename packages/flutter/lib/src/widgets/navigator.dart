@@ -22,7 +22,6 @@ import 'framework.dart';
 import 'heroes.dart';
 import 'notification_listener.dart';
 import 'overlay.dart';
-import 'pages.dart';
 import 'restoration.dart';
 import 'restoration_properties.dart';
 import 'routes.dart';
@@ -67,9 +66,6 @@ typedef RestorableRouteBuilder<T> = Route<T> Function(BuildContext context, Obje
 
 /// Signature for the [Navigator.popUntil] predicate argument.
 typedef RoutePredicate = bool Function(Route<dynamic> route);
-
-/// Convenience function for passing around a builder for a transiton's secondary animation.
-typedef DelegatedTransitionBuilder = Widget Function(BuildContext context, Widget? child, Animation<double> animation);
 
 /// Signature for a callback that verifies that it's OK to call [Navigator.pop].
 ///
@@ -5358,10 +5354,7 @@ class NavigatorState extends State<Navigator> with TickerProviderStateMixin, Res
     }());
     final _RouteEntry entry = _history.lastWhere(_RouteEntry.isPresentPredicate);
     if (entry.pageBased && widget.onPopPage != null) {
-      // if (entry.route is ModalRoute<T>) {
-      //     delegateTransitionBuilder = (entry.route as ModalRoute<T>).delegatedTransition;
-      //   }
-      if (widget.onPopPage!(entry.route, result) && entry.currentState == _RouteLifecycle.idle) {
+      if (widget.onPopPage!(entry.route, result) && entry.currentState.index <= _RouteLifecycle.idle.index) {
         // The entry may have been disposed if the pop finishes synchronously.
         assert(entry.route._popCompleter.isCompleted);
         entry.currentState = _RouteLifecycle.pop;
@@ -5522,15 +5515,6 @@ class NavigatorState extends State<Navigator> with TickerProviderStateMixin, Res
 
   /// Notifies its listeners if the value of [userGestureInProgress] changes.
   final ValueNotifier<bool> userGestureInProgressNotifier = ValueNotifier<bool>(false);
-
-  /// Notifies its listeners if there is a delegate transition from the top route.
-  final ValueNotifier<DelegatedTransitionBuilder?> delegateTransitionBuilderNotifier = ValueNotifier<Widget Function(BuildContext context, Widget? child, Animation<double> animation)?>(null);
-
-  /// Sets the delegate transition.
-  set delegateTransitionBuilder(DelegatedTransitionBuilder? builder) => delegateTransitionBuilderNotifier.value = builder;
-
-  /// Gets the delegate transition.
-  DelegatedTransitionBuilder? get delegateTransitionBuilder => delegateTransitionBuilderNotifier.value;
 
   /// The navigator is being controlled by a user gesture.
   ///

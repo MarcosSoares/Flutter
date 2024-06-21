@@ -324,7 +324,7 @@ class _ZoomPageTransition extends StatelessWidget {
             child: child,
           );
         },
-        delegateTransitionBuilder: receivedTransition,
+        receivedTransitionBuilder: receivedTransition,
         child: child,
       ),
     );
