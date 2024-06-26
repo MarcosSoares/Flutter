@@ -174,8 +174,8 @@ void main() {
     expect(inkFeatures, paints..rect(rect: const Rect.fromLTRB(350.0, 250.0, 450.0, 350.0), color: const Color(0xff00ff00)));
   });
 
-  testWidgets('ink well works with InkBox', (WidgetTester tester) async {
-    await tester.pumpWidget(InkBox(
+  testWidgets('ink well works with SplashBox', (WidgetTester tester) async {
+    await tester.pumpWidget(SplashBox(
       child: Directionality(
         textDirection: TextDirection.ltr,
         child: Center(

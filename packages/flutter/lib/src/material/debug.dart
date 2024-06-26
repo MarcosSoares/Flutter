@@ -31,11 +31,11 @@ import 'scaffold.dart' show Scaffold, ScaffoldMessenger;
 ///
 /// Does nothing if asserts are disabled. Always returns true.
 @Deprecated(
-  'Use debugCheckHasInkController instead. '
-  'With the addition of InkBox, ink effects no longer require an ancestor Material widget. '
+  'Use debugCheckSplash instead. '
+  'With the addition of SplashBox, a Material widget is no longer required. '
   'This feature was deprecated after v3.23.0-0.1.pre.',
 )
-bool debugCheckHasMaterial(BuildContext context) => debugCheckHasInkController(context);
+bool debugCheckHasMaterial(BuildContext context) => debugCheckSplash(context);
 
 /// Asserts that the given context has a [Localizations] ancestor that contains
 /// a [MaterialLocalizations] delegate.

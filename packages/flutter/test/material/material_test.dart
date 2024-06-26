@@ -321,10 +321,10 @@ void main() {
     expect(pressed, isTrue);
   });
 
-  testWidgets('Material.of(context) works with InkBox', (WidgetTester tester) async {
+  testWidgets('Material.of(context) works with SplashBox', (WidgetTester tester) async {
     Color? color;
 
-    await tester.pumpWidget(InkBox(
+    await tester.pumpWidget(SplashBox(
       color: Colors.cyan,
       child: Builder(builder: (BuildContext context) {
         color = Material.of(context).color;
@@ -1212,13 +1212,13 @@ void main() {
       );
     });
 
-    testWidgets('hides Material from debugCheckHasInkController', (WidgetTester tester) async {
+    testWidgets('hides Material from debugCheckSplash', (WidgetTester tester) async {
       await tester.pumpWidget(
         Material(
           child: LookupBoundary(
             child: Builder(
               builder: (BuildContext context) {
-                debugCheckHasInkController(context);
+                debugCheckSplash(context);
                 return Container();
               },
             ),
@@ -1232,21 +1232,17 @@ void main() {
       expect(
         error.toStringDeep(), startsWith(
           'FlutterError\n'
-          '   No InkController found within the closest LookupBoundary.\n'
-          '   There is an ancestor InkBox widget, but it is hidden by a\n'
+          '   No SplashController found within the closest LookupBoundary.\n'
+          "   There is an ancestor SplashController, but it's hidden by a\n"
           '   LookupBoundary.\n'
-          '   Builder widgets require an InkController ancestor within the\n'
-          '   closest LookupBoundary.\n'
-          '   Ink effects require an ancestor "ink controller" RenderBox in\n'
-          '   order to be properly displayed. This is usually accomplished with\n'
-          "   the InkBox widget, or with the Material widget from Flutter's\n"
-          '   material library. Because of this, several widgets require that\n'
-          '   there be an InkController in the tree above them.\n'
-          '   To introduce an InkController, you can use an InkBox, or there\n'
-          '   are several viable options from the Material libary, including\n'
-          '   Material, Card, Dialog, Drawer, and Scaffold.\n'
-          '   The specific widget that could not find a InkController ancestor\n'
-          '   was:\n'
+          '   Builder widgets use a SplashController to show Splash effects,\n'
+          '   and no SplashController ancestor was found within the closest\n'
+          '   LookupBoundary.\n'
+          '   A SplashController can be provided by an ancestor SplashBox;\n'
+          '   alternatively, there are several viable options from the Material\n'
+          '   libary, including Material, Card, Dialog, Drawer, and Scaffold.\n'
+          '   The specific widget that could not find a SplashController\n'
+          '   ancestor was:\n'
           '     Builder\n'
           '   The ancestors of this widget were:\n'
           '     LookupBoundary\n'

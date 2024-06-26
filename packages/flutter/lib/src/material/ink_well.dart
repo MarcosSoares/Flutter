@@ -19,6 +19,45 @@ import 'theme.dart';
 // Examples can assume:
 // late BuildContext context;
 
+/// A feature that displays a `color` "splash" in response to a user
+/// gesture that can be confirmed or canceled.
+///
+/// Subclasses call `confirm` when an input gesture is recognized. For
+/// example a press event might trigger an ink feature that's confirmed
+/// when the corresponding up event is seen.
+///
+/// Subclasses call `cancel` when an input gesture is aborted before it
+/// is recognized. For example a press event might trigger an ink feature
+/// that's canceled when the pointer is dragged out of the reference
+/// box.
+///
+/// The [InkWell] and [InkResponse] widgets generate instances of this
+/// class.
+@Deprecated(
+  'Use InteractiveSplash instead. '
+  '"Splash effects" no longer rely on a MaterialInkController. '
+  'This feature was deprecated after v3.23.0-0.1.pre.',
+)
+typedef InteractiveInkFeature = Splash;
+
+/// An encapsulation of a [Splash] constructor used by [InkWell],
+/// [InkResponse], and [ThemeData].
+///
+/// Interactive ink feature implementations should provide a static const
+/// `splashFactory` value that's an instance of this class. The `splashFactory`
+/// can be used to configure an [InkWell], [InkResponse] or [ThemeData].
+///
+/// See also:
+///
+///  * [InkSplash.splashFactory]
+///  * [InkRipple.splashFactory]
+@Deprecated(
+  'Use SplashFactory instead. '
+  '"Splash effects" no longer rely on a MaterialInkController. '
+  'This feature was deprecated after v3.23.0-0.1.pre.',
+)
+typedef InteractiveInkFeatureFactory = SplashFactory;
+
 abstract class _ParentInkResponseState {
   void markChildInkResponsePressed(_ParentInkResponseState childState, bool value);
 }
@@ -91,11 +130,11 @@ typedef _CheckContext = bool Function(BuildContext context);
 /// matches the Material Design premise wherein the [Material] is what is
 /// actually reacting to touches by spreading ink.
 ///
-/// If a Widget uses this class directly, it should call [debugCheckHasInkController]
+/// If a Widget uses this class directly, it should call [debugCheckSplash]
 /// at the top of its build method:
 ///
 /// ```dart
-/// assert(debugCheckHasInkController(context));
+/// assert(debugCheckSplash(context));
 /// ```
 ///
 /// ## Troubleshooting
@@ -1197,11 +1236,11 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 /// matches the Material Design premise wherein the [Material] is what is
 /// actually reacting to touches by spreading ink.
 ///
-/// If a Widget uses this class directly, it should call [debugCheckHasInkController]
+/// If a Widget uses this class directly, it should call [debugCheckSplash]
 /// at the top of its build method:
 ///
 /// ```dart
-/// assert(debugCheckHasInkController(context));
+/// assert(debugCheckSplash(context));
 /// ```
 ///
 /// ## Troubleshooting
@@ -1216,19 +1255,19 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 ///
 /// Replacing the opaque widget with a [Material] allows the ink splash to be shown.
 ///
-/// Alternatively, an [InkBox] can be set as the opaque widget's child, and
-/// ink effects will be visible on top of it.
+/// Alternatively, an [SplashBox] can be set as the opaque widget's child, and
+/// [SplashEffect] effects will be visible on top of it.
 ///
 /// ### InkWell isn't clipping properly
 ///
-/// In order to clip an InkWell (or any other [InkFeature] widgets), clipping should
-/// be applied to the widget providing the [InkController], which could be a [Material]
-/// or an [InkBox].
+/// In order to clip an InkWell (or any other [SplashEffect] widgets), clipping should
+/// be applied to the widget providing the [SplashController], which could be a
+/// [Material] or a [SplashBox].
 ///
-/// If, for example, the ancestor [InkController] is supplied by a [Scaffold],
+/// If, for example, the ancestor [SplashController] is supplied by a [Scaffold],
 /// clipping the ancestor might be undesirable. In this case, the InkWell can
-/// be wrapped in an [InkBox], so that clipping, resizing, and ink effects are
-/// no longer directly tied to the [Scaffold].
+/// be wrapped in a [SplashBox], so that clipping, resizing, and [SplashEffect] effects
+/// are no longer directly tied to the [Scaffold].
 ///
 /// ### The ink splashes don't track the size of an animated container
 /// If the size of an InkWell's [Material] ancestor changes while the InkWell's

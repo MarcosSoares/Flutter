@@ -4,16 +4,16 @@
 
 import 'package:flutter/material.dart';
 
-void main() => runApp(const InkBoxExampleApp());
+void main() => runApp(const SplashBoxExampleApp());
 
-class InkBoxExampleApp extends StatefulWidget {
-  const InkBoxExampleApp() : super(key: const AppKey());
+class SplashBoxExampleApp extends StatefulWidget {
+  const SplashBoxExampleApp() : super(key: const AppKey());
 
   @override
-  State<InkBoxExampleApp> createState() => _InkBoxExampleAppState();
+  State<SplashBoxExampleApp> createState() => _SplashBoxExampleAppState();
 }
 
-class _InkBoxExampleAppState extends State<InkBoxExampleApp> {
+class _SplashBoxExampleAppState extends State<SplashBoxExampleApp> {
   Hue hue = Hue(0);
   Brightness brightness = Brightness.light;
 
@@ -25,7 +25,7 @@ class _InkBoxExampleAppState extends State<InkBoxExampleApp> {
   ///
   /// Since [MaterialApp] includes an [AnimatedTheme], any color from
   /// `Theme.of(context).colorScheme` will have a smooth transition,
-  /// so we can use an [InkBox] to keep all the colors in sync.
+  /// so we can use an [SplashBox] to keep all the colors in sync.
   ThemeData get theme {
     final Color color = hue.toColor();
 
@@ -61,13 +61,13 @@ class _InkBoxExampleAppState extends State<InkBoxExampleApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: theme,
-      home: const InkBoxExample(),
+      home: const SplashBoxExample(),
     );
   }
 }
 
-class InkBoxExample extends StatelessWidget {
-  const InkBoxExample({super.key});
+class SplashBoxExample extends StatelessWidget {
+  const SplashBoxExample({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class InkBoxExample extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('InkBox example')),
+      appBar: AppBar(title: const Text('SplashBox example')),
       body: Center(
         child: SizedBox(
           width: 200,
@@ -106,7 +106,7 @@ class InkBoxExample extends StatelessWidget {
 /// a [Material], but it has a few downsides (see the [Ink]
 /// documentation for more details).
 ///
-/// Instead, we can use [InkBox] to give our button a
+/// Instead, we can use [SplashBox] to give our button a
 /// super fun gradient!
 class GradientButton extends StatelessWidget {
   const GradientButton({
@@ -120,18 +120,18 @@ class GradientButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget child;
 
-  /// This getter creates an [InkBox], using the values passed
+  /// This getter creates an [SplashBox], using the values passed
   /// to the widget.
   ///
-  /// Setting the [InkBox.color] is optional, but doing so
+  /// Setting the [SplashBox.color] is optional, but doing so
   /// allows the widget's descendants to access its value,
-  /// using the [InkController.of] method.
+  /// using the [SplashEffect.of] method.
   ///
   /// ```dart
-  /// final Color? color = InkController.of(context).color;
+  /// final Color? color = Splash.of(context).color;
   /// ```
-  InkBox get inkBox {
-    return InkBox(
+  SplashBox get splashBox {
+    return SplashBox(
       color: color,
       child: InkWell(
         onTap: onPressed,
@@ -184,7 +184,7 @@ class GradientButton extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: gradient,
         ),
-        child: inkBox,
+        child: splashBox,
       ),
     );
   }
@@ -193,7 +193,7 @@ class GradientButton extends StatelessWidget {
 /// Using a global key allows us to call functions from the app's [State]
 /// anywhere we'd like, and [GlobalObjectKey] is great because it has
 /// a `const` constructor.
-class AppKey extends GlobalObjectKey<_InkBoxExampleAppState> {
+class AppKey extends GlobalObjectKey<_SplashBoxExampleAppState> {
   /// We're using the [Hue] type as the [GlobalObjectKey] argument,
   /// but any constant [Object] works.
   ///

@@ -42,11 +42,11 @@ class SizeChangedLayoutNotification extends LayoutChangedNotification {
 /// To listen for the notification dispatched by this widget, use a
 /// [NotificationListener<SizeChangedLayoutNotification>].
 ///
-/// The [Material] class listens for [LayoutChangedNotification]s, including
-/// [SizeChangedLayoutNotification]s, to repaint [InkResponse] and [InkWell] ink
+/// The [SplashBox] class listens for [LayoutChangedNotification]s, including
+/// [SizeChangedLayoutNotification]s, to repaint [InkResponse] and [InkWell]
 /// effects. When a widget is likely to change size, wrapping it in a
-/// [SizeChangedLayoutNotifier] will cause the ink effects to correctly repaint
-/// when the child changes size.
+/// [SizeChangedLayoutNotifier] will cause the [Splash] effects to correctly
+/// repaint when the child changes size.
 ///
 /// See also:
 ///

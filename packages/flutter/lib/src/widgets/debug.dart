@@ -9,11 +9,11 @@ import 'package:flutter/foundation.dart';
 
 import 'basic.dart';
 import 'framework.dart';
-import 'ink_box.dart';
 import 'localizations.dart';
 import 'lookup_boundary.dart';
 import 'media_query.dart';
 import 'overlay.dart';
+import 'splash.dart';
 import 'table.dart';
 
 // Examples can assume:
@@ -242,17 +242,17 @@ bool debugItemsHaveDuplicateKeys(Iterable<Widget> items) {
   return false;
 }
 
-/// Asserts that the given context has an [InkBox] ancestor within the closest
+/// Asserts that the given context has a [SplashBox] ancestor within the closest
 /// [LookupBoundary].
 ///
 /// Used by many widgets to make sure that they are only used in contexts where
-/// they have an [InkBox] or other widget that enables ink effects.
+/// they have a [SplashBox] or other widget that enables [SplashEffect] effects.
 ///
 /// To call this function, use the following pattern, typically in the
 /// relevant Widget's build method:
 ///
 /// ```dart
-/// assert(debugCheckHasInkController(context));
+/// assert(debugCheckSplash(context));
 /// ```
 ///
 /// Always place this before any early returns, so that the invariant is checked
@@ -262,31 +262,27 @@ bool debugItemsHaveDuplicateKeys(Iterable<Widget> items) {
 /// This method can be expensive (it walks the element tree).
 ///
 /// Does nothing if asserts are disabled. Always returns true.
-bool debugCheckHasInkController(BuildContext context) {
+bool debugCheckSplash(BuildContext context) {
   assert(() {
-    if (InkController.maybeOf(context) == null) {
-      final bool hiddenByBoundary = LookupBoundary.debugIsHidingAncestorRenderObjectOfType<InkController>(context);
+    if (Splash.maybeOf(context) == null) {
+      final bool hiddenByBoundary = LookupBoundary.debugIsHidingAncestorRenderObjectOfType<SplashController>(context);
       throw FlutterError.fromParts(<DiagnosticsNode>[
-        ErrorSummary('No InkController found${hiddenByBoundary ? ' within the closest LookupBoundary' : ''}.'),
+        ErrorSummary('No SplashController found${hiddenByBoundary ? ' within the closest LookupBoundary' : ''}.'),
         if (hiddenByBoundary)
           ErrorDescription(
-            'There is an ancestor InkBox widget, but it is hidden by a LookupBoundary.',
+            "There is an ancestor SplashController, but it's hidden by a LookupBoundary.",
           ),
         ErrorDescription(
-          '${context.widget.runtimeType} widgets require an InkController '
-          'ancestor within the closest LookupBoundary.\n'
-          'Ink effects require an ancestor "ink controller" RenderBox in order '
-          'to be properly displayed. This is usually accomplished with the InkBox '
-          "widget, or with the Material widget from Flutter's material library. "
-          'Because of this, several widgets require that there be an '
-          'InkController in the tree above them.',
+          '${context.widget.runtimeType} widgets use a SplashController to show '
+          'Splash effects, and no SplashController ancestor was found within '
+          'the closest LookupBoundary.\n',
         ),
         ErrorHint(
-          'To introduce an InkController, you can use an InkBox, or there are '
-          'several viable options from the Material libary, including Material, '
-          'Card, Dialog, Drawer, and Scaffold.',
+          'A SplashController can be provided by an ancestor SplashBox; alternatively, '
+          'there are several viable options from the Material libary, including '
+          'Material, Card, Dialog, Drawer, and Scaffold.',
         ),
-        ...context.describeMissingAncestor(expectedAncestorType: InkController),
+        ...context.describeMissingAncestor(expectedAncestorType: SplashController),
       ]);
     }
     return true;

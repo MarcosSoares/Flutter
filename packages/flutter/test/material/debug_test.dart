@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('debugCheckHasInkController control test', (WidgetTester tester) async {
+  testWidgets('debugCheckSplash control test', (WidgetTester tester) async {
     await tester.pumpWidget(const Center(child: Chip(label: Text('label'))));
     final dynamic exception = tester.takeException();
     expect(exception, isFlutterError);
@@ -17,9 +17,9 @@ void main() {
     expect(
       error.diagnostics[2].toStringDeep(),
       equalsIgnoringHashCodes(
-        'To introduce an InkController, you can use an InkBox, or there\n'
-        'are several viable options from the Material libary, including\n'
-        'Material, Card, Dialog, Drawer, and Scaffold.\n',
+        'A SplashController can be provided by an ancestor SplashBox;\n'
+        'alternatively, there are several viable options from the Material\n'
+        'libary, including Material, Card, Dialog, Drawer, and Scaffold.\n',
       ),
     );
     expect(error.diagnostics[3], isA<DiagnosticsProperty<Element>>());
@@ -27,23 +27,18 @@ void main() {
     expect(
       error.toStringDeep(), startsWith(
       'FlutterError\n'
-      '   No InkController found.\n'
-      '   Chip widgets require an InkController ancestor within the closest\n'
+      '   No SplashController found.\n'
+      '   Chip widgets use a SplashController to show Splash effects, and\n'
+      '   no SplashController ancestor was found within the closest\n'
       '   LookupBoundary.\n'
-      '   Ink effects require an ancestor "ink controller" RenderBox in\n'
-      '   order to be properly displayed. This is usually accomplished with\n'
-      "   the InkBox widget, or with the Material widget from Flutter's\n"
-      '   material library. Because of this, several widgets require that\n'
-      '   there be an InkController in the tree above them.\n'
-      '   To introduce an InkController, you can use an InkBox, or there\n'
-      '   are several viable options from the Material libary, including\n'
-      '   Material, Card, Dialog, Drawer, and Scaffold.\n'
-      '   The specific widget that could not find a InkController ancestor\n'
-      '   was:\n'
+      '   A SplashController can be provided by an ancestor SplashBox;\n'
+      '   alternatively, there are several viable options from the Material\n'
+      '   libary, including Material, Card, Dialog, Drawer, and Scaffold.\n'
+      '   The specific widget that could not find a SplashController\n'
+      '   ancestor was:\n'
       '     Chip\n'
       '   The ancestors of this widget were:\n'
       '     Center\n'
-      // End of ancestor chain omitted, not relevant for test.
     ));
   });
 

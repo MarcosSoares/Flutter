@@ -27,24 +27,54 @@
 version: 1
 transforms:
   # Changes made in https://github.com/flutter/flutter/pull/149963
-  - title: "Replace 'MaterialInkController' with 'InkController'"
+  - title: "Replace 'MaterialInkController' with 'SplashController'"
     date: 2024-02-01
     element:
       uris: [ 'material.dart' ]
       class: 'MaterialInkController'
     changes:
       - kind: 'rename'
-        newName: 'InkController'
+        newName: 'SplashController'
 
   # Changes made in https://github.com/flutter/flutter/pull/149963
-  - title: "Replace 'debugCheckHasMaterial' with 'debugCheckHasInkController'"
+  - title: "Replace 'debugCheckHasMaterial' with 'debugCheckSplash'"
     date: 2024-02-01
     element:
       uris: [ 'material.dart' ]
       function: 'debugCheckHasMaterial'
     changes:
       - kind: 'rename'
-        newName: 'debugCheckHasInkController'
+        newName: 'debugCheckSplash'
+
+  # Changes made in https://github.com/flutter/flutter/pull/149963
+  - title: "Replace 'InkFeature' with 'SplashEffect'"
+    date: 2024-02-01
+    element:
+      uris: [ 'material.dart' ]
+      class: 'InkFeature'
+    changes:
+      - kind: 'rename'
+        newName: 'SplashEffect'
+
+  # Changes made in https://github.com/flutter/flutter/pull/149963
+  - title: "Replace 'InteractiveInkFeature' with 'Splash'"
+    date: 2024-02-01
+    element:
+      uris: [ 'material.dart' ]
+      class: 'InteractiveInkFeature'
+    changes:
+      - kind: 'rename'
+        newName: 'Splash'
+
+  # Changes made in https://github.com/flutter/flutter/pull/149963
+  - title: "Replace 'InteractiveInkFeatureFactory' with 'SplashFactory'"
+    date: 2024-02-01
+    element:
+      uris: [ 'material.dart' ]
+      class: 'InteractiveInkFeatureFactory'
+    changes:
+      - kind: 'rename'
+        newName: 'SplashFactory'
 
   # Changes made in https://github.com/flutter/flutter/pull/15303
   - title: "Replace 'child' with 'builder'"

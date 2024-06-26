@@ -36,7 +36,7 @@ enum MaterialType {
 
   /// A transparent piece of material that draws ink splashes and highlights.
   ///
-  /// A [Material] with the transparency type is similar to an [InkBox],
+  /// A [Material] with the transparency type is similar to a [SplashBox],
   /// and includes configuration for elevation, border, and text style.
   transparency
 }
@@ -56,12 +56,12 @@ const Map<MaterialType, BorderRadius?> kMaterialEdges = <MaterialType, BorderRad
 };
 
 @Deprecated(
-  'Use InkController instead. '
-  'Both Material and InkBox can be used for ink effects. '
+  'Use SplashController instead. '
+  'Both Material and SplashBox can be used for Splash effects. '
   'This feature was deprecated after v3.23.0-0.1.pre.',
 )
 /// An interface for creating ink effects on a [Material].
-typedef MaterialInkController = InkController;
+typedef MaterialInkController = SplashController;
 
 /// A piece of material.
 ///
@@ -86,7 +86,7 @@ typedef MaterialInkController = InkController;
 /// Most user interface elements are either conceptually printed on a piece of
 /// material or themselves made of material. Material reacts to user input using
 /// [InkSplash] and [InkHighlight] effects. To trigger a reaction on the
-/// material, use an [InkController] obtained via [Material.of].
+/// material, use a [SplashController] obtained via [Material.of].
 ///
 /// In general, the features of a [Material] should not change over time (e.g. a
 /// [Material] should not change its [color], [shadowColor] or [type]).
@@ -324,17 +324,17 @@ class Material extends StatelessWidget {
   /// Typical usage is as follows:
   ///
   /// ```dart
-  /// InkController? inkController = Material.maybeOf(context);
+  /// SplashController? splashController = Material.maybeOf(context);
   /// ```
   ///
   /// This method can be expensive (it walks the element tree).
   ///
   /// See also:
   ///
-  /// * [InkController.maybeOf], which is identical to this method.
+  /// * [SplashController.maybeOf], which is identical to this method.
   /// * [Material.of], which is similar to this method, but asserts if
-  ///   no [InkController] ancestor is found.
-  static InkController? maybeOf(BuildContext context) => InkController.maybeOf(context);
+  ///   no [SplashController] ancestor is found.
+  static SplashController? maybeOf(BuildContext context) => Splash.maybeOf(context);
 
   /// The ink controller from the closest instance of [Material] that encloses
   /// the given context within the closest [LookupBoundary].
@@ -345,7 +345,7 @@ class Material extends StatelessWidget {
   /// Typical usage is as follows:
   ///
   /// ```dart
-  /// InkController inkController = Material.of(context);
+  /// SplashController splashController = Material.of(context);
   /// ```
   ///
   /// This method can be expensive (it walks the element tree).
@@ -354,11 +354,11 @@ class Material extends StatelessWidget {
   ///
   /// * [Material.maybeOf], which is similar to this method, but returns null if
   ///   no [Material] ancestor is found.
-  static InkController of(BuildContext context) {
-    final InkController? controller = maybeOf(context);
+  static SplashController of(BuildContext context) {
+    final SplashController? controller = maybeOf(context);
     assert(() {
       if (controller == null) {
-        if (LookupBoundary.debugIsHidingAncestorRenderObjectOfType<InkController>(context)) {
+        if (LookupBoundary.debugIsHidingAncestorRenderObjectOfType<SplashController>(context)) {
           throw FlutterError(
             'Material.of() was called with a context that does not have access to a Material widget.\n'
             'The context provided to Material.of() does have a Material widget ancestor, but it is '
@@ -421,12 +421,15 @@ class Material extends StatelessWidget {
     Widget? contents = child;
     if (contents != null) {
       contents = AnimatedDefaultTextStyle(
-        style: textStyle ?? Theme.of(context).textTheme.bodyMedium!,
+        style: textStyle ?? theme.textTheme.bodyMedium!,
         duration: animationDuration,
         child: contents,
       );
     }
-    contents = InkBox(color: isTransparent ? null : backgroundColor, child: contents);
+    contents = SplashBox(
+      color: isTransparent ? null : backgroundColor,
+      child: contents,
+    );
 
     ShapeBorder? shape = borderRadius != null
         ? RoundedRectangleBorder(borderRadius: borderRadius!)
@@ -492,6 +495,16 @@ class Material extends StatelessWidget {
   }
 }
 
+/// A visual reaction shown on a [SplashBox].
+///
+/// To add an ink feature, obtain the [SplashController]
+/// via [Material.of] and call [SplashController.addInkFeature].
+@Deprecated(
+  'Use Splash instead. '
+  'Splash effects no longer rely on a MaterialInkController. '
+  'This feature was deprecated after v3.23.0-0.1.pre.',
+)
+typedef InkFeature = SplashEffect;
 
 /// An interpolation between two [ShapeBorder]s.
 ///

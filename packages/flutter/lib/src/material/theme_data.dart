@@ -37,6 +37,7 @@ import 'icon_button_theme.dart';
 import 'ink_ripple.dart';
 import 'ink_sparkle.dart';
 import 'ink_splash.dart';
+import 'ink_well.dart';
 import 'input_decorator.dart';
 import 'list_tile.dart';
 import 'list_tile_theme.dart';
