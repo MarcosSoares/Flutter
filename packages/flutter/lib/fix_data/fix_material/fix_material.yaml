@@ -47,14 +47,14 @@ transforms:
         newName: 'debugCheckSplash'
 
   # Changes made in https://github.com/flutter/flutter/pull/149963
-  - title: "Replace 'InkFeature' with 'SplashEffect'"
+  - title: "Replace 'InkFeature' with 'Splash'"
     date: 2024-02-01
     element:
       uris: [ 'material.dart' ]
       class: 'InkFeature'
     changes:
       - kind: 'rename'
-        newName: 'SplashEffect'
+        newName: 'Splash'
 
   # Changes made in https://github.com/flutter/flutter/pull/149963
   - title: "Replace 'InteractiveInkFeature' with 'Splash'"

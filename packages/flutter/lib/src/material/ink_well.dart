@@ -1256,17 +1256,17 @@ class _InkResponseState extends State<_InkResponseStateWidget>
 /// Replacing the opaque widget with a [Material] allows the ink splash to be shown.
 ///
 /// Alternatively, an [SplashBox] can be set as the opaque widget's child, and
-/// [SplashEffect] effects will be visible on top of it.
+/// [Splash] effects will be visible on top of it.
 ///
 /// ### InkWell isn't clipping properly
 ///
-/// In order to clip an InkWell (or any other [SplashEffect] widgets), clipping should
+/// In order to clip an InkWell (or any other [Splash] widgets), clipping should
 /// be applied to the widget providing the [SplashController], which could be a
 /// [Material] or a [SplashBox].
 ///
 /// If, for example, the ancestor [SplashController] is supplied by a [Scaffold],
 /// clipping the ancestor might be undesirable. In this case, the InkWell can
-/// be wrapped in a [SplashBox], so that clipping, resizing, and [SplashEffect] effects
+/// be wrapped in a [SplashBox], so that clipping, resizing, and [Splash] effects
 /// are no longer directly tied to the [Scaffold].
 ///
 /// ### The ink splashes don't track the size of an animated container

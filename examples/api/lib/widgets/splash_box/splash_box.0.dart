@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 
+/// Flutter code sample for [SplashBox].
+
 void main() => runApp(const SplashBoxExampleApp());
 
 class SplashBoxExampleApp extends StatefulWidget {
@@ -25,7 +27,7 @@ class _SplashBoxExampleAppState extends State<SplashBoxExampleApp> {
   ///
   /// Since [MaterialApp] includes an [AnimatedTheme], any color from
   /// `Theme.of(context).colorScheme` will have a smooth transition,
-  /// so we can use an [SplashBox] to keep all the colors in sync.
+  /// so we can use a [SplashBox] for improved performance.
   ThemeData get theme {
     final Color color = hue.toColor();
 
@@ -120,12 +122,12 @@ class GradientButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final Widget child;
 
-  /// This getter creates an [SplashBox], using the values passed
+  /// This getter creates a [SplashBox] using the values passed
   /// to the widget.
   ///
   /// Setting the [SplashBox.color] is optional, but doing so
   /// allows the widget's descendants to access its value,
-  /// using the [SplashEffect.of] method.
+  /// using the [Splash.of] method.
   ///
   /// ```dart
   /// final Color? color = Splash.of(context).color;

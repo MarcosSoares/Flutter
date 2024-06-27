@@ -331,7 +331,7 @@ class Material extends StatelessWidget {
   ///
   /// See also:
   ///
-  /// * [SplashController.maybeOf], which is identical to this method.
+  /// * [Splash.maybeOf], which is identical to this method.
   /// * [Material.of], which is similar to this method, but asserts if
   ///   no [SplashController] ancestor is found.
   static SplashController? maybeOf(BuildContext context) => Splash.maybeOf(context);
@@ -352,6 +352,7 @@ class Material extends StatelessWidget {
   ///
   /// See also:
   ///
+  /// * [Splash.of], which is identical to this method.
   /// * [Material.maybeOf], which is similar to this method, but returns null if
   ///   no [Material] ancestor is found.
   static SplashController of(BuildContext context) {
@@ -495,16 +496,30 @@ class Material extends StatelessWidget {
   }
 }
 
-/// A visual reaction shown on a [SplashBox].
+/// A visual reaction on a piece of [Material].
 ///
-/// To add an ink feature, obtain the [SplashController]
-/// via [Material.of] and call [SplashController.addInkFeature].
+/// To add an ink feature to a piece of [Material], obtain the
+/// [MaterialInkController] via [Material.of] and call
+/// [MaterialInkController.addInkFeature].
 @Deprecated(
   'Use Splash instead. '
   'Splash effects no longer rely on a MaterialInkController. '
   'This feature was deprecated after v3.23.0-0.1.pre.',
 )
-typedef InkFeature = SplashEffect;
+abstract class InkFeature extends Splash {
+  /// Initializes fields for subclasses.
+  @Deprecated(
+    'Use Splash instead. '
+    'Splash effects no longer rely on a MaterialInkController. '
+    'This feature was deprecated after v3.23.0-0.1.pre.',
+  )
+  InkFeature({
+    required super.controller,
+    required super.referenceBox,
+    super.color = Colors.transparent,
+    super.onRemoved,
+  });
+}
 
 /// An interpolation between two [ShapeBorder]s.
 ///

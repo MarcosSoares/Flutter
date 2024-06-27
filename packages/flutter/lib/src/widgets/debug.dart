@@ -246,7 +246,7 @@ bool debugItemsHaveDuplicateKeys(Iterable<Widget> items) {
 /// [LookupBoundary].
 ///
 /// Used by many widgets to make sure that they are only used in contexts where
-/// they have a [SplashBox] or other widget that enables [SplashEffect] effects.
+/// they have a [SplashBox] or other widget that enables [Splash] effects.
 ///
 /// To call this function, use the following pattern, typically in the
 /// relevant Widget's build method:

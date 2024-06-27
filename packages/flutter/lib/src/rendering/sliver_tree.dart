@@ -51,7 +51,7 @@ class TreeSliverNodeParentData extends SliverMultiBoxAdaptorParentData {
 /// [TreeSliver.treeNodeBuilder], with the depth of the given tree row
 /// accessed by [TreeSliverNode.depth]. This allows for more customization in
 /// building tree rows, such as filling the indented area with decorations or
-/// [Splash] effects.
+/// ink effects.
 ///
 /// {@tool dartpad}
 /// This example shows a highly customized [TreeSliver] configured to
