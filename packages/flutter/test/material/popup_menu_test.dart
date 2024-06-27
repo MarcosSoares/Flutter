@@ -4166,14 +4166,14 @@ void main() {
     expect(iconText.text.style?.color, Colors.red);
   });
 
-  testWidgets('The menu should not steal focus from the TextField when it appears.', (WidgetTester tester) async {
-    final FocusNode focusNode = FocusNode();
+  testWidgets('If requestFocus is false, the original focus should be preserved upon menu appearance.', (WidgetTester tester) async {
+    final FocusNode fieldFocusNode = FocusNode();
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: Column(
             children: <Widget>[
-              TextField(focusNode: focusNode, autofocus: true),
+              TextField(focusNode: fieldFocusNode, autofocus: true),
               PopupMenuButton<int>(
                 style: const ButtonStyle(
                   iconColor: MaterialStatePropertyAll<Color>(Colors.red),
@@ -4186,6 +4186,7 @@ void main() {
                     ),
                   ];
                 },
+                requestFocus: false,
                 child: const Text('click here'),
               )
             ],
@@ -4193,9 +4194,10 @@ void main() {
         ),
       ),
     );
+    expect(fieldFocusNode.hasFocus, isTrue);
     await tester.tap(find.text('click here'));
     await tester.pump();
-    expect(focusNode.hasFocus, isTrue);
+    expect(fieldFocusNode.hasFocus, isTrue);
   });
 }
 

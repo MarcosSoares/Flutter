@@ -859,8 +859,8 @@ class _PopupMenuRoute<T> extends PopupRoute<T> {
     required this.clipBehavior,
     super.settings,
     this.popUpAnimationStyle,
-    this.requestFocus = false,
-  }) : itemSizes = List<Size?>.filled(items.length, null),
+    bool? requestFocus,
+  }) : itemSizes = List<Size?>.filled(items.length, null), _requestFocus = requestFocus,
        // Menus always cycle focus through their items irrespective of the
        // focus traversal edge behavior set in the Navigator.
        super(traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop);
@@ -880,8 +880,9 @@ class _PopupMenuRoute<T> extends PopupRoute<T> {
   final BoxConstraints? constraints;
   final Clip clipBehavior;
   final AnimationStyle? popUpAnimationStyle;
+  final bool? _requestFocus;
   @override
-  final bool requestFocus;
+  bool get requestFocus => _requestFocus ?? super.requestFocus;
 
   CurvedAnimation? _animation;
 
@@ -1049,6 +1050,7 @@ Future<T?> showMenu<T>({
   Clip clipBehavior = Clip.none,
   RouteSettings? routeSettings,
   AnimationStyle? popUpAnimationStyle,
+  bool? requestFocus,
 }) {
   assert(items.isNotEmpty);
   assert(debugCheckHasMaterialLocalizations(context));
@@ -1083,6 +1085,7 @@ Future<T?> showMenu<T>({
     clipBehavior: clipBehavior,
     settings: routeSettings,
     popUpAnimationStyle: popUpAnimationStyle,
+    requestFocus: requestFocus,
   ));
 }
 
@@ -1214,6 +1217,7 @@ class PopupMenuButton<T> extends StatefulWidget {
     this.popUpAnimationStyle,
     this.routeSettings,
     this.style,
+    this.requestFocus,
   }) : assert(
          !(child != null && icon != null),
          'You can only pass [child] or [icon], not both.',
@@ -1422,6 +1426,11 @@ class PopupMenuButton<T> extends StatefulWidget {
   /// Null by default.
   final ButtonStyle? style;
 
+  /// Whether to request focus for it when the menu appears.
+  ///
+  /// Defaults is [Navigator.requestFocus].
+  final bool? requestFocus;
+
   @override
   PopupMenuButtonState<T> createState() => PopupMenuButtonState<T>();
 }
@@ -1484,6 +1493,7 @@ class PopupMenuButtonState<T> extends State<PopupMenuButton<T>> {
         useRootNavigator: widget.useRootNavigator,
         popUpAnimationStyle: widget.popUpAnimationStyle,
         routeSettings: widget.routeSettings,
+        requestFocus: widget.requestFocus,
       )
       .then<void>((T? newValue) {
         if (!mounted) {
