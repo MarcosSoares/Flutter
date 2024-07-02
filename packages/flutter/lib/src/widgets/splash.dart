@@ -37,7 +37,7 @@ abstract class Splash {
   Splash({
     required this.controller,
     required this.referenceBox,
-    required Color color,
+    Color color = const Color(0x00000000),
     ShapeBorder? customBorder,
     this.onRemoved,
   }) : _color = color,
