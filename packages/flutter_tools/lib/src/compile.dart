@@ -896,7 +896,7 @@ class DefaultResidentCompiler implements ResidentCompiler {
     }));
 
     if (nativeAssetsUri != null && nativeAssetsUri.isNotEmpty) {
-      await _writelnToServerStdin('native assets $nativeAssetsUri', printTrace: true);
+      await _writelnToServerStdin('native-assets $nativeAssetsUri', printTrace: true);
     }
 
     await _writelnToServerStdin('compile $scriptUri', printTrace: true);
