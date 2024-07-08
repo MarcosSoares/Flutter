@@ -799,6 +799,13 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
           case TargetPlatform.fuchsia:
           case TargetPlatform.linux:
           case TargetPlatform.windows:
+            if (theme.useMaterial3) {
+              final _SwitchConfig config = _SwitchConfigM3(context);
+              final double trackInnerStart = config.trackHeight / 2.0;
+              final double trackInnerEnd = config.trackWidth - trackInnerStart;
+              final double trackInnerLength = trackInnerEnd - trackInnerStart;
+              return trackInnerLength;
+            }
             return widget.size.width - switchConfig.switchMinSize.width;
           case TargetPlatform.iOS:
           case TargetPlatform.macOS:
@@ -809,6 +816,13 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
             return trackInnerLength;
         }
       case _SwitchType.material:
+        if (theme.useMaterial3) {
+          final _SwitchConfig config = _SwitchConfigM3(context);
+          final double trackInnerStart = config.trackHeight / 2.0;
+          final double trackInnerEnd = config.trackWidth - trackInnerStart;
+          final double trackInnerLength = trackInnerEnd - trackInnerStart;
+          return trackInnerLength;
+        }
         return widget.size.width - switchConfig.switchMinSize.width;
     }
   }
@@ -2234,7 +2248,7 @@ class _SwitchConfigM3 with _SwitchConfig {
   double get switchHeightCollapsed => switchMinSize.height;
 
   @override
-  double get switchWidth => trackWidth - 2 * (trackHeight / 2.0) + switchMinSize.width;
+  double get switchWidth => 52.0;
 
   @override
   double get thumbRadiusWithIcon => 24.0 / 2;

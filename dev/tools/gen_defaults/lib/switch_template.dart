@@ -198,7 +198,7 @@ class _SwitchConfigM3 with _SwitchConfig {
   double get switchHeightCollapsed => switchMinSize.height;
 
   @override
-  double get switchWidth => trackWidth - 2 * (trackHeight / 2.0) + switchMinSize.width;
+  double get switchWidth => 52.0;
 
   @override
   double get thumbRadiusWithIcon => ${getToken('md.comp.switch.with-icon.handle.width')} / 2;
