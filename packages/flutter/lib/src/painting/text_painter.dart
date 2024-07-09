@@ -30,6 +30,7 @@ import 'text_span.dart';
 import 'text_style.dart';
 
 export 'dart:ui' show LineMetrics;
+
 export 'package:flutter/services.dart' show TextRange, TextSelection;
 
 /// The default font size if none is specified.
