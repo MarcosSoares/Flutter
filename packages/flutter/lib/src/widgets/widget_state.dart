@@ -36,20 +36,20 @@ abstract interface class WidgetStateMapKey {
 
 // A private class, used in [WidgetStateOperators].
 class _WidgetStateOperation implements WidgetStateMapKey {
-  const _WidgetStateOperation(this._call);
+  const _WidgetStateOperation(this._matchesSet);
 
-  final bool Function(Set<WidgetState> states) _call;
+  final bool Function(Set<WidgetState> states) _matchesSet;
 
   @override
-  bool matchesSet(Set<WidgetState> states) => _call(states);
+  bool matchesSet(Set<WidgetState> states) => _matchesSet(states);
 }
 
 /// These operators can be used inside a [WidgetStateMap] to combine states
 /// and find a match.
 ///
-/// Since enums can't extend other classes, [WidgetState]
-/// instead `implements` the [WidgetStateMapKey] class, so the operators
-/// in this extension apply to it.
+/// Since enums can't extend other classes, [WidgetState] instead
+/// `implements` the [WidgetStateMapKey] interface, and this `extension`
+/// ensures that they'll work for every [WidgetStateMapKey] object.
 ///
 /// {@macro flutter.widgets.WidgetStateProperty.WidgetStateMap}
 extension WidgetStateOperators on WidgetStateMapKey {
@@ -245,8 +245,8 @@ abstract class WidgetStateColor extends Color implements WidgetStateProperty<Col
 
   /// Creates a [WidgetStateColor] from a [WidgetStateMap<Color>].
   ///
-  /// If used as a regular color, the color resolved in the default state (the
-  /// empty set of states) will be used.
+  /// If used as a regular color, the first key that matches an empty
+  /// [Set] of [WidgetState]s will be selected.
   ///
   /// The given map parameter must match a non-null color in the default state.
   factory WidgetStateColor.map(WidgetStateMap<Color> map) = _WidgetStateColorMapper;
@@ -451,8 +451,8 @@ abstract class WidgetStateBorderSide extends BorderSide implements WidgetStatePr
 
   /// Creates a [WidgetStateBorderSide] from a [WidgetStateMap].
   ///
-  /// If used as a regular [BorderSide], the border resolved in the default state
-  /// (the empty set of states) will be used.
+  /// If used as a regular [BorderSide], the first key that matches an empty
+  /// [Set] of [WidgetState]s will be selected.
   ///
   /// Example:
   ///
@@ -611,8 +611,8 @@ abstract class WidgetStateTextStyle extends TextStyle implements WidgetStateProp
 
   /// Creates a [WidgetStateTextStyle] from a [WidgetStateMap].
   ///
-  /// If used as a regular text style, the style resolved in the default state (the
-  /// empty set of states) will be used.
+  /// If used as a regular text style, the first key that matches an empty
+  /// [Set] of [WidgetState]s will be selected.
   ///
   /// The given map parameter must match a non-null text style in the default state.
   const factory WidgetStateTextStyle.map(WidgetStateMap<TextStyle> map) = _WidgetTextStyleMapper;
@@ -671,7 +671,13 @@ abstract class WidgetStateProperty<T> {
   /// constructor is only needed for backward compatibility.
   WidgetStateProperty();
 
-  /// Convenience method for creating a [WidgetStateProperty] from a [WidgetStateMap].
+  /// Creates a property that resolves using a [WidgetStateMap].
+  ///
+  /// See also:
+  ///
+  ///  * [WidgetState.any], a map key that matches any set of states.
+  ///  * [WidgetStateOperators], which defines how the `&` `|` `~`
+  ///    operators apply to [WidgetStateMapKey]s.
   const factory WidgetStateProperty.map(WidgetStateMap<T> map) = _WidgetStateMapper<T>;
 
   /// Resolves the value for the given set of states if `value` is a
@@ -763,7 +769,7 @@ class _WidgetStatePropertyWith<T> implements WidgetStateProperty<T> {
 ///   ~WidgetState.disabled: Colors.black,
 /// });
 ///
-/// // the same implementation, but with a MaterialPropertyResolver:
+/// // the same implementation, but with a WidgetPropertyResolver:
 /// WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
 ///   if (states.contains(WidgetState.error)) {
 ///     return Colors.red;
@@ -792,7 +798,7 @@ class _WidgetStatePropertyWith<T> implements WidgetStateProperty<T> {
 ///   },
 /// );
 ///
-/// // MaterialPropertyResolver implementation:
+/// // WidgetPropertyResolver implementation:
 /// final WidgetStateProperty<Color> colorResolveWith = WidgetStateProperty.resolveWith<Color>(
 ///   (Set<WidgetState> states) {
 ///     if (states.containsAll(<WidgetState>{WidgetState.selected, WidgetState.error})) {
