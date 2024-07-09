@@ -1468,7 +1468,22 @@ class _SelectableFragment with Selectable, Diagnosticable, ChangeNotifier implem
     final int end = math.max(_textSelectionStart!.offset, _textSelectionEnd!.offset);
     return SelectedContent(
       plainText: fullText.substring(start, end),
+      geometry: value,
     );
+  }
+
+  @override
+  List<SelectedContentRange<Object>>? getSelections() {
+    if (_textSelectionStart == null || _textSelectionEnd == null) {
+      return null;
+    }
+    final SelectedContentRange<String> localSelectedContentRange = SelectedContentRange<String>(
+      content: fullText,
+      contentLength: fullText.length,
+      startOffset: _textSelectionStart!.offset,
+      endOffset: _textSelectionEnd!.offset,
+    );
+    return <SelectedContentRange<Object>>[localSelectedContentRange];
   }
 
   void _didChangeSelection() {

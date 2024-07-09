@@ -86,6 +86,11 @@ abstract class SelectionHandler implements ValueListenable<SelectionGeometry> {
   /// Return `null` if nothing is selected.
   SelectedContent? getSelectedContent();
 
+  /// Gets the list of selections in this object.
+  ///
+  /// Return `null` if nothing is selected.
+  List<SelectedContentRange<Object>>? getSelections();
+
   /// Handles the [SelectionEvent] sent to this object.
   ///
   /// The subclasses need to update their selections or delegate the
@@ -100,17 +105,135 @@ abstract class SelectionHandler implements ValueListenable<SelectionGeometry> {
   SelectionResult dispatchSelectionEvent(SelectionEvent event);
 }
 
+/// This class stores the information of an active selection under
+/// a [Selectable] or [SelectionHandler].
+///
+/// The [SelectedContentRange]s for a given [Selectable] or
+/// [SelectionHandler] can be retrieved by calling
+/// [SelectionHandler.getSelections].
+///
+/// [SelectionArea] and [SelectableRegion] provide access to the
+/// [SelectedContentRange]s that represent their active selection
+/// through the [SelectionListener.onSelectionChanged] callback.
+///
+/// See also:
+///
+///   * [SelectionListener], which provides selection updates in
+///   the form of [SelectedContentRange]s for the subtree it wraps,
+///   contained under a [SelectionArea] or [SelectableRegion].
+@immutable
+class SelectedContentRange<T extends Object> {
+  /// Creates a [SelectedContentRange] with the given values.
+  const SelectedContentRange({
+    this.selectableId,
+    required this.content,
+    required this.contentLength,
+    required this.startOffset,
+    required this.endOffset,
+    this.children,
+  });
+
+  /// The unique id for the [Selectable] that created the range.
+  final Object? selectableId;
+
+  /// The content that contains the selection.
+  final T content;
+
+  /// The length of the content.
+  ///
+  /// The absolute value of the difference between the start
+  /// offset and end offset contained by this [SelectedContentRange]
+  /// must not exceed the content length.
+  final int contentLength;
+
+  /// The start of the selection relative to the [content].
+  ///
+  /// {@template flutter.rendering.selection.SelectedContentRange.selectionOffsets}
+  /// For example a [Text] widgets content is in the format
+  /// of an [InlineSpan] tree.
+  ///
+  /// Take the [Text] widget and [TextSpan] tree below:
+  ///
+  /// {@tool snippet}
+  /// ```dart
+  /// const Text.rich(
+  ///   TextSpan(
+  ///     text: 'Hello world, ',
+  ///     children: <InlineSpan>[
+  ///       WidgetSpan(
+  ///         child: Text('how are you today?'),
+  ///       ),
+  ///     ],
+  ///   ),
+  /// )
+  /// ```
+  /// {@end-tool}
+  ///
+  /// If we select from the beginning of 'world' to the
+  /// end of the '?' in the [WidgetSpan], the [startOffset]
+  /// in the root [SelectedContentRange] will be 6,
+  /// and [endOffset] will be 14. This is because the
+  /// [WidgetSpan] begins at index 13 in the root text
+  /// and ends at index 14. In this example, the root
+  /// [SelectedContentRange] will have one child
+  /// which represents the selection inside the [WidgetSpan].
+  /// In the child [SelectedContentRange] the [startOffset]
+  /// will be 0 and the [endOffset] will be 18. These offsets
+  /// are relative to the content in the child [SelectedContentRange]
+  /// and not the root text.
+  /// {@endtemplate}
+  final int startOffset;
+
+  /// The end of the selection relative to the [content].
+  ///
+  /// {@macro flutter.rendering.selection.SelectedContentRange.selectionOffsets}
+  final int endOffset;
+
+  /// Additional ranges to include as children.
+  ///
+  /// Children of a given range enable more granular modification of the
+  /// selection.
+  final List<SelectedContentRange<Object>>? children;
+
+  @override
+  String toString() {
+    return 'SelectedContentRange(\n'
+           '  selectableId: $selectableId,\n'
+           '  content: $content,\n'
+           '  startOffset: $startOffset,\n'
+           '  endOffset: $endOffset,\n'
+           '  children: $children,\n'
+           ')';
+  }
+}
+
 /// The selected content in a [Selectable] or [SelectionHandler].
 // TODO(chunhtai): Add more support for rich content.
 // https://github.com/flutter/flutter/issues/104206.
+@immutable
 class SelectedContent {
   /// Creates a selected content object.
   ///
   /// Only supports plain text.
-  const SelectedContent({required this.plainText});
+  const SelectedContent({
+    required this.plainText,
+    required this.geometry,
+  });
 
   /// The selected content in plain text format.
   final String plainText;
+
+  /// The [SelectionGeometry] of the [Selectable] or [SelectionHandler] containing
+  /// the selection.
+  final SelectionGeometry geometry;
+
+  @override
+  String toString() {
+    return 'SelectedContent(\n'
+           '  plainText: $plainText,\n'
+           '  geometry: $geometry,\n'
+           ')';
+  }
 }
 
 /// A mixin that can be selected by users when under a [SelectionArea] widget.

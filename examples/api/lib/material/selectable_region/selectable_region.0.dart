@@ -67,6 +67,7 @@ class _SelectableAdapter extends SingleChildRenderObjectWidget {
   _RenderSelectableAdapter createRenderObject(BuildContext context) {
     return _RenderSelectableAdapter(
       DefaultSelectionStyle.of(context).selectionColor!,
+      child!,
       registrar,
     );
   }
@@ -75,6 +76,7 @@ class _SelectableAdapter extends SingleChildRenderObjectWidget {
   void updateRenderObject(BuildContext context, _RenderSelectableAdapter renderObject) {
     renderObject
       ..selectionColor = DefaultSelectionStyle.of(context).selectionColor!
+      ..content = child!
       ..registrar = registrar;
   }
 }
@@ -82,8 +84,10 @@ class _SelectableAdapter extends SingleChildRenderObjectWidget {
 class _RenderSelectableAdapter extends RenderProxyBox with Selectable, SelectionRegistrant {
   _RenderSelectableAdapter(
     Color selectionColor,
+    Widget content,
     SelectionRegistrar registrar,
   )   : _selectionColor = selectionColor,
+        _content = content,
         _geometry = ValueNotifier<SelectionGeometry>(_noSelection) {
     this.registrar = registrar;
     _geometry.addListener(markNeedsPaint);
@@ -93,13 +97,22 @@ class _RenderSelectableAdapter extends RenderProxyBox with Selectable, Selection
   final ValueNotifier<SelectionGeometry> _geometry;
 
   Color get selectionColor => _selectionColor;
-  late Color _selectionColor;
+  Color _selectionColor;
   set selectionColor(Color value) {
     if (_selectionColor == value) {
       return;
     }
     _selectionColor = value;
     markNeedsPaint();
+  }
+
+  Widget get content => _content;
+  Widget _content;
+  set content(Widget value) {
+    if (_content == value) {
+      return;
+    }
+    _content = value;
   }
 
   // ValueListenable APIs
@@ -268,7 +281,25 @@ class _RenderSelectableAdapter extends RenderProxyBox with Selectable, Selection
   // widget into clipboard.
   @override
   SelectedContent? getSelectedContent() {
-    return value.hasSelection ? const SelectedContent(plainText: 'Custom Text') : null;
+    return value.hasSelection ? SelectedContent(
+      plainText: 'Custom Text',
+      geometry: value,
+    ) : null;
+  }
+
+  @override
+  List<SelectedContentRange<Object>>? getSelections() {
+    if (!value.hasSelection) {
+      return null;
+    }
+    return <SelectedContentRange<Object>>[
+      SelectedContentRange<Widget>(
+        content: content,
+        startOffset: 0,
+        endOffset: 1,
+        contentLength: 1,
+      ),
+    ];
   }
 
   LayerLink? _startHandle;
