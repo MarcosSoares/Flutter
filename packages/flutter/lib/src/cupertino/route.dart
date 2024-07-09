@@ -110,6 +110,9 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
   /// {@endtemplate}
   String? get title;
 
+  /// The delegated transition received from an incoming route.
+  DelegatedTransitionBuilder? receivedTransition;
+
   ValueNotifier<String?>? _previousTitle;
 
   /// The title string of the previous [CupertinoPageRoute].
@@ -166,7 +169,12 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) {
     // Don't perform outgoing animation if the next route is a fullscreen dialog.
-    return nextRoute is CupertinoRouteTransitionMixin && !nextRoute.fullscreenDialog;
+    return nextRoute is FlexibleTransitionRouteMixin<T> || nextRoute is CupertinoRouteTransitionMixin && !nextRoute.fullscreenDialog;
+  }
+
+  @override
+  bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) {
+    return previousRoute is FlexibleTransitionRouteMixin<T> || previousRoute is CupertinoRouteTransitionMixin && !previousRoute.fullscreenDialog;
   }
 
   @override
@@ -212,6 +220,7 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
+    DelegatedTransitionBuilder? receivedTransition,
     Widget child,
   ) {
     // Check if the route has an animation that's currently participating
@@ -232,6 +241,7 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
         primaryRouteAnimation: animation,
         secondaryRouteAnimation: secondaryAnimation,
         linearTransition: linearTransition,
+        receivedTransitionBuilder: receivedTransition,
         child: _CupertinoBackGestureDetector<T>(
           enabledCallback: () => route.popGestureEnabled,
           onStartPopGesture: () => _startPopGesture<T>(route),
@@ -243,7 +253,7 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    return buildPageTransitions<T>(this, context, animation, secondaryAnimation, child);
+    return buildPageTransitions<T>(this, context, animation, secondaryAnimation, receivedTransition, child);
   }
 }
 
@@ -273,7 +283,7 @@ mixin CupertinoRouteTransitionMixin<T> on PageRoute<T> {
 ///  * [CupertinoTabScaffold], for applications that have a tab bar at the
 ///    bottom with multiple pages.
 ///  * [CupertinoPage], for a [Page] version of this class.
-class CupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTransitionMixin<T> {
+class CupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTransitionMixin<T>, FlexibleTransitionRouteMixin<T> {
   /// Creates a page route for use in an iOS designed app.
   ///
   /// The [builder], [maintainState], and [fullscreenDialog] arguments must not
@@ -289,6 +299,9 @@ class CupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTransitionMi
   }) {
     assert(opaque);
   }
+
+  @override
+  DelegatedTransitionBuilder? delegatedTransition = CupertinoPageTransition.delegateTransition;
 
   /// Builds the primary contents of the route.
   final WidgetBuilder builder;
@@ -310,13 +323,16 @@ class CupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTransitionMi
 //
 // This route uses the builder from the page to build its content. This ensures
 // the content is up to date after page updates.
-class _PageBasedCupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTransitionMixin<T> {
+class _PageBasedCupertinoPageRoute<T> extends PageRoute<T> with CupertinoRouteTransitionMixin<T>, FlexibleTransitionRouteMixin<T> {
   _PageBasedCupertinoPageRoute({
     required CupertinoPage<T> page,
     super.allowSnapshotting = true,
   }) : super(settings: page) {
     assert(opaque);
   }
+
+  @override
+  DelegatedTransitionBuilder? delegatedTransition = CupertinoPageTransition.delegateTransition;
 
   CupertinoPage<T> get _page => settings as CupertinoPage<T>;
 
@@ -402,6 +418,7 @@ class CupertinoPageTransition extends StatefulWidget {
     required this.secondaryRouteAnimation,
     required this.child,
     required this.linearTransition,
+    this.receivedTransitionBuilder,
   });
 
   /// The widget below this widget in the tree.
@@ -418,6 +435,27 @@ class CupertinoPageTransition extends StatefulWidget {
   ///  * `linearTransition` is whether to perform the transitions linearly.
   ///    Used to precisely track back gesture drags.
   final bool linearTransition;
+
+  /// Delegated transition builder
+  final DelegatedTransitionBuilder? receivedTransitionBuilder;
+
+  /// The delegated transition.
+  static Widget delegateTransition(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget? child) {
+    final Animation<Offset> delegatedPositionAnimation =
+      CurvedAnimation(
+        parent: secondaryAnimation,
+        curve: Curves.linearToEaseOut,
+        reverseCurve: Curves.easeInToLinear,
+      ).drive(_kMiddleLeftTween);
+    assert(debugCheckHasDirectionality(context));
+    final TextDirection textDirection = Directionality.of(context);
+    return SlideTransition(
+      position: delegatedPositionAnimation,
+      textDirection: textDirection,
+      transformHitTests: false,
+      child: child,
+    );
+  }
 
   @override
   State<CupertinoPageTransition> createState() => _CupertinoPageTransitionState();
@@ -500,17 +538,17 @@ class _CupertinoPageTransitionState extends State<CupertinoPageTransition> {
   Widget build(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
     final TextDirection textDirection = Directionality.of(context);
-    return SlideTransition(
-      position: _secondaryPositionAnimation,
-      textDirection: textDirection,
-      transformHitTests: false,
-      child: SlideTransition(
-        position: _primaryPositionAnimation,
+      return SlideTransition(
+        position: _secondaryPositionAnimation,
         textDirection: textDirection,
-        child: DecoratedBoxTransition(
-          decoration: _primaryShadowAnimation,
-          child: widget.child,
-        ),
+        transformHitTests: false,
+        child: SlideTransition(
+          position: _primaryPositionAnimation,
+          textDirection: textDirection,
+          child: DecoratedBoxTransition(
+            decoration: _primaryShadowAnimation,
+            child: widget.child,
+          ),
       ),
     );
   }

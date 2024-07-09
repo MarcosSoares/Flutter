@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'basic.dart';
 import 'container.dart';
 import 'framework.dart';
+import 'navigator.dart';
 import 'text.dart';
 
 export 'package:flutter/rendering.dart' show RelativeRect;
@@ -137,6 +138,9 @@ class _AnimatedState extends State<AnimatedWidget> {
   @override
   Widget build(BuildContext context) => widget.build(context);
 }
+
+/// Convenience function for passing around a builder for a transiton's secondary animation.
+typedef DelegatedTransitionBuilder = Widget Function(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget? child);
 
 /// Animates the position of a widget relative to its normal position.
 ///

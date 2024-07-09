@@ -197,10 +197,13 @@ class _ZoomPageTransition extends StatelessWidget {
   const _ZoomPageTransition({
     required this.animation,
     required this.secondaryAnimation,
+    this.receivedTransition,
     required this.allowSnapshotting,
     required this.allowEnterRouteSnapshotting,
     this.child,
   });
+
+  final DelegatedTransitionBuilder? receivedTransition;
 
   // A curve sequence that is similar to the 'fastOutExtraSlowIn' curve used in
   // the native transition.
@@ -567,6 +570,7 @@ abstract class PageTransitionsBuilder {
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
+    DelegatedTransitionBuilder? receivedTransition,
     Widget child,
   );
 }
@@ -599,6 +603,7 @@ class FadeUpwardsPageTransitionsBuilder extends PageTransitionsBuilder {
     BuildContext? context,
     Animation<double> animation,
     Animation<double>? secondaryAnimation,
+    DelegatedTransitionBuilder? receivedTransition,
     Widget child,
   ) {
     return _FadeUpwardsPageTransition(routeAnimation: animation, child: child);
@@ -630,6 +635,7 @@ class OpenUpwardsPageTransitionsBuilder extends PageTransitionsBuilder {
     BuildContext? context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
+    DelegatedTransitionBuilder? receivedTransition,
     Widget child,
   ) {
     return _OpenUpwardsPageTransition(
@@ -702,12 +708,44 @@ class ZoomPageTransitionsBuilder extends PageTransitionsBuilder {
   // for the Impeller backend.
   static const bool _kProfileForceDisableSnapshotting = bool.fromEnvironment('flutter.benchmarks.force_disable_snapshot');
 
+  /// The delegated transition.
+  static Widget delegateTransition(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget? child) {
+    return DualTransitionBuilder(
+      animation: ReverseAnimation(secondaryAnimation),
+      forwardBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Widget? child,
+      ) {
+        return _ZoomEnterTransition(
+          animation: animation,
+          allowSnapshotting: true ,
+          reverse: true,
+          child: child,
+        );
+      },
+      reverseBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Widget? child,
+      ) {
+        return _ZoomExitTransition(
+          animation: animation,
+          allowSnapshotting: true,
+          child: child,
+        );
+      },
+      child: child,
+    );
+  }
+
   @override
   Widget buildTransitions<T>(
     PageRoute<T> route,
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
+    DelegatedTransitionBuilder? receivedTransition,
     Widget child,
   ) {
     if (_kProfileForceDisableSnapshotting) {
@@ -720,6 +758,7 @@ class ZoomPageTransitionsBuilder extends PageTransitionsBuilder {
     return _ZoomPageTransition(
       animation: animation,
       secondaryAnimation: secondaryAnimation,
+      receivedTransition: receivedTransition,
       allowSnapshotting: allowSnapshotting && route.allowSnapshotting,
       allowEnterRouteSnapshotting: allowEnterRouteSnapshotting,
       child: child,
@@ -750,9 +789,10 @@ class CupertinoPageTransitionsBuilder extends PageTransitionsBuilder {
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
+    DelegatedTransitionBuilder? receivedTransition,
     Widget child,
   ) {
-    return CupertinoRouteTransitionMixin.buildPageTransitions<T>(route, context, animation, secondaryAnimation, child);
+    return CupertinoRouteTransitionMixin.buildPageTransitions<T>(route, context, animation, secondaryAnimation, receivedTransition, child);
   }
 }
 
@@ -815,6 +855,7 @@ class PageTransitionsTheme with Diagnosticable {
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
+    DelegatedTransitionBuilder? receivedTransition,
     Widget child,
   ) {
     return _PageTransitionsThemeTransitions<T>(
@@ -822,8 +863,22 @@ class PageTransitionsTheme with Diagnosticable {
       route: route,
       animation: animation,
       secondaryAnimation: secondaryAnimation,
+      receivedTransition: receivedTransition,
       child: child,
     );
+  }
+
+  /// Provide delegate transition for platform.
+  DelegatedTransitionBuilder? delegatedTransition(BuildContext context) {
+    final TargetPlatform platform = Theme.of(context).platform;
+
+    final PageTransitionsBuilder matchingBuilder =
+      builders[platform] ?? const ZoomPageTransitionsBuilder();
+
+    if (matchingBuilder == const ZoomPageTransitionsBuilder()) {
+      return ZoomPageTransitionsBuilder.delegateTransition;
+    }
+    return null;
   }
 
   // Map the builders to a list with one PageTransitionsBuilder per platform for
@@ -869,6 +924,7 @@ class _PageTransitionsThemeTransitions<T> extends StatefulWidget {
     required this.route,
     required this.animation,
     required this.secondaryAnimation,
+    this.receivedTransition,
     required this.child,
   });
 
@@ -876,6 +932,7 @@ class _PageTransitionsThemeTransitions<T> extends StatefulWidget {
   final PageRoute<T> route;
   final Animation<double> animation;
   final Animation<double> secondaryAnimation;
+  final DelegatedTransitionBuilder? receivedTransition;
   final Widget child;
 
   @override
@@ -907,6 +964,7 @@ class _PageTransitionsThemeTransitionsState<T> extends State<_PageTransitionsThe
       context,
       widget.animation,
       widget.secondaryAnimation,
+      widget.receivedTransition,
       widget.child,
     );
   }
