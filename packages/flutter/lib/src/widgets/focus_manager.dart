@@ -15,6 +15,7 @@ import 'binding.dart';
 import 'focus_scope.dart';
 import 'focus_traversal.dart';
 import 'framework.dart';
+import 'view.dart';
 
 /// Setting to true will cause extensive logging to occur when focus changes occur.
 ///
@@ -1459,12 +1460,20 @@ enum FocusHighlightStrategy {
   alwaysTraditional,
 }
 
-// By extending the WidgetsBindingObserver class,
-// we can add a listener object to FocusManager as a private member.
-class _AppLifecycleListener extends WidgetsBindingObserver {
-  _AppLifecycleListener(this.onLifecycleStateChanged);
+// Instead of making the FocusManager a WidgetsBindingObserver, we use a
+// separate class so that its API surface doesn't become part of the
+// FocusManager's public API.
+class _WidgetsBindingObserver extends WidgetsBindingObserver {
+  _WidgetsBindingObserver({
+    required this.onLifecycleStateChanged,
+    required this.onViewFocusChanged,
+  });
 
   final void Function(AppLifecycleState) onLifecycleStateChanged;
+  final void Function(ViewFocusEvent) onViewFocusChanged;
+
+  @override
+  void didChangeViewFocus(ViewFocusEvent event) => onViewFocusChanged(event);
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) => onLifecycleStateChanged(state);
@@ -1532,10 +1541,11 @@ class FocusManager with DiagnosticableTreeMixin, ChangeNotifier {
     if (kFlutterMemoryAllocationsEnabled) {
       ChangeNotifier.maybeDispatchObjectCreation(this);
     }
-    if (_respondToWindowFocus) {
-      _appLifecycleListener = _AppLifecycleListener(_appLifecycleChange);
-      WidgetsBinding.instance.addObserver(_appLifecycleListener!);
-    }
+    _widgetsBindingObserver = _WidgetsBindingObserver(
+      onLifecycleStateChanged: _appLifecycleChanged,
+      onViewFocusChanged: _viewFocusChanged,
+    );
+    WidgetsBinding.instance.addObserver(_widgetsBindingObserver);
     rootScope._manager = this;
   }
 
@@ -1549,7 +1559,7 @@ class FocusManager with DiagnosticableTreeMixin, ChangeNotifier {
   /// Until these are resolved, we won't be adding the listener to mobile platforms.
   /// https://github.com/flutter/flutter/issues/148475#issuecomment-2118407411
   /// https://github.com/flutter/flutter/pull/142930#issuecomment-1981750069
-  bool get _respondToWindowFocus => kIsWeb || switch (defaultTargetPlatform) {
+  bool get _respondToLifecycleChange => kIsWeb || switch (defaultTargetPlatform) {
     TargetPlatform.android || TargetPlatform.iOS => false,
     TargetPlatform.fuchsia || TargetPlatform.linux => true,
     TargetPlatform.windows || TargetPlatform.macOS => true,
@@ -1568,9 +1578,7 @@ class FocusManager with DiagnosticableTreeMixin, ChangeNotifier {
 
   @override
   void dispose() {
-    if (_appLifecycleListener != null) {
-      WidgetsBinding.instance.removeObserver(_appLifecycleListener!);
-    }
+    WidgetsBinding.instance.removeObserver(_widgetsBindingObserver);
     _highlightManager.dispose();
     rootScope.dispose();
     super.dispose();
@@ -1730,14 +1738,26 @@ class FocusManager with DiagnosticableTreeMixin, ChangeNotifier {
   final Set<FocusNode> _dirtyNodes = <FocusNode>{};
 
   // Allows FocusManager to respond to app lifecycle state changes,
-  // temporarily suspending the primaryFocus when the app is inactive.
-  _AppLifecycleListener? _appLifecycleListener;
+  // temporarily suspending the primaryFocus when the app is inactive,
+  // and keeping track of the currently focused view.
+  late final _WidgetsBindingObserver _widgetsBindingObserver;
 
   // Stores the node that was focused before the app lifecycle changed.
   // Will be restored as the primary focus once app is resumed.
   FocusNode? _suspendedNode;
 
-  void _appLifecycleChange(AppLifecycleState state) {
+  // The ID of the most recently focused view. Used to keep from sending too
+  // many view focus requests to the engine.
+  int? _lastFocusedViewId;
+
+  void _viewFocusChanged(ViewFocusEvent event) {
+    _lastFocusedViewId = event.viewId;
+  }
+
+  void _appLifecycleChanged(AppLifecycleState state) {
+    if (!_respondToLifecycleChange) {
+      return;
+    }
     if (state == AppLifecycleState.resumed) {
       if (_primaryFocus != rootScope) {
         assert(_focusDebug(() => 'focus changed while app was paused, ignoring $_suspendedNode'));
@@ -1873,6 +1893,16 @@ class FocusManager with DiagnosticableTreeMixin, ChangeNotifier {
     assert(_focusDebug(() => 'Notified ${_dirtyNodes.length} dirty nodes:', () => _dirtyNodes));
     _dirtyNodes.clear();
     if (previousFocus != _primaryFocus) {
+      if (_primaryFocus != null && (_primaryFocus!.context?.mounted ?? false)) {
+        final int? viewId = View.maybeOf(_primaryFocus!.context!)?.viewId;
+        if (viewId != null && viewId != _lastFocusedViewId) {
+          WidgetsBinding.instance.platformDispatcher.requestViewFocusChange(
+            direction: ViewFocusDirection.forward,
+            state: ViewFocusState.focused,
+            viewId: viewId,
+          );
+        }
+      }
       notifyListeners();
     }
     assert(() {
@@ -1883,27 +1913,6 @@ class FocusManager with DiagnosticableTreeMixin, ChangeNotifier {
     }());
   }
 
-  /// Enables this [FocusManager] to listen to changes of the application
-  /// lifecycle if it does not already have an application lifecycle listener
-  /// active, and the app isn't running on a native mobile platform.
-  ///
-  /// Typically, the application lifecycle listener for this [FocusManager] is
-  /// setup at construction, but sometimes it is necessary to manually initialize
-  /// it when the [FocusManager] does not have the relevant platform context in
-  /// [defaultTargetPlatform] at the time of construction. This can happen in
-  /// a test environment where the [BuildOwner] which initializes its own
-  /// [FocusManager], may not have the accurate platform context during its
-  /// initialization. In this case it is necessary for the test framework to call
-  /// this method after it has set up the test variant for a given test, so the
-  /// [FocusManager] can accurately listen to application lifecycle changes, if
-  /// supported.
-  @visibleForTesting
-  void listenToApplicationLifecycleChangesIfSupported() {
-    if (_appLifecycleListener == null && _respondToWindowFocus) {
-      _appLifecycleListener = _AppLifecycleListener(_appLifecycleChange);
-      WidgetsBinding.instance.addObserver(_appLifecycleListener!);
-    }
-  }
 
   @override
   List<DiagnosticsNode> debugDescribeChildren() {
