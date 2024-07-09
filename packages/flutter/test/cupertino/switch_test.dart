@@ -553,7 +553,7 @@ void main() {
         child: Center(
           child: CupertinoSwitch(
             value: false,
-            trackColor: trackColor,
+            inactiveTrackColor: trackColor,
             dragStartBehavior: DragStartBehavior.down,
             onChanged: null,
           ),
@@ -562,7 +562,7 @@ void main() {
     );
 
     expect(find.byType(CupertinoSwitch), findsOneWidget);
-    expect(tester.widget<CupertinoSwitch>(find.byType(CupertinoSwitch)).trackColor, trackColor);
+    expect(tester.widget<CupertinoSwitch>(find.byType(CupertinoSwitch)).inactiveTrackColor, trackColor);
     expect(find.byType(CupertinoSwitch), paints..rrect(color: trackColor));
   });
 

@@ -72,8 +72,8 @@ class CupertinoSwitch extends StatefulWidget {
     super.key,
     required this.value,
     required this.onChanged,
-    this.activeColor,
-    this.trackColor,
+    this.activeTrackColor,
+    this.inactiveTrackColor,
     this.thumbColor,
     this.applyTheme,
     this.focusColor,
@@ -117,13 +117,13 @@ class CupertinoSwitch extends StatefulWidget {
   /// If null and [applyTheme] is false, defaults to [CupertinoColors.systemGreen]
   /// in accordance to native iOS behavior. Otherwise, defaults to
   /// [CupertinoThemeData.primaryColor].
-  final Color? activeColor;
+  final Color? activeTrackColor;
 
 
   /// The color to use for the track when the switch is off.
   ///
   /// Defaults to [CupertinoColors.secondarySystemFill] when null.
-  final Color? trackColor;
+  final Color? inactiveTrackColor;
 
   /// The color to use for the thumb of the switch.
   ///
@@ -132,7 +132,7 @@ class CupertinoSwitch extends StatefulWidget {
 
   /// The color to use for the focus highlight for keyboard interactions.
   ///
-  /// Defaults to a slightly transparent [activeColor].
+  /// Defaults to a slightly transparent [activeTrackColor].
   final Color? focusColor;
 
   /// The color to use for the accessibility label when the switch is on.
@@ -363,7 +363,7 @@ class _CupertinoSwitchState extends State<CupertinoSwitch> with TickerProviderSt
   Widget build(BuildContext context) {
     final CupertinoThemeData theme = CupertinoTheme.of(context);
     final Color activeColor = CupertinoDynamicColor.resolve(
-      widget.activeColor
+      widget.activeTrackColor
       ?? ((widget.applyTheme ?? theme.applyThemeToAll) ? theme.primaryColor : null)
       ?? CupertinoColors.systemGreen,
       context,
@@ -398,7 +398,7 @@ class _CupertinoSwitchState extends State<CupertinoSwitch> with TickerProviderSt
           child: _CupertinoSwitchRenderObjectWidget(
             value: widget.value,
             activeColor: activeColor,
-            trackColor: CupertinoDynamicColor.resolve(widget.trackColor ?? CupertinoColors.secondarySystemFill, context),
+            trackColor: CupertinoDynamicColor.resolve(widget.inactiveTrackColor ?? CupertinoColors.secondarySystemFill, context),
             thumbColor: CupertinoDynamicColor.resolve(widget.thumbColor ?? CupertinoColors.white, context),
             // Opacity, lightness, and saturation values were approximated with
             // color pickers on the switches in the macOS settings.
